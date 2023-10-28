@@ -12,7 +12,7 @@ export default function Products() {
         window.scroll(0, 0);
     }, []);
     return (
-        <div className="bg-gray-200 h-screen">
+        <div className="bg-gray-200 min-h-screen">
             <h1 className="text-black font-bold text-4xl ml-16 pt-8 mb-4">All products</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full ">
                 {data.map(product => (

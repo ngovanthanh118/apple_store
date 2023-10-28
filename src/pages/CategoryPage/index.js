@@ -19,8 +19,8 @@ export default function Categories() {
     const ipadProducts = products.filter(product => product.type === "ipad");
 
     return (
-        <div className="mt-28 px-8 py-4">
-            <h1 className="font-bold my-5 text-3xl">Mobiles</h1>
+        <div className="mt-28 px-8 py-4 min-h-screen">
+            <h1 className="font-bold my-2 text-3xl">Mobiles</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full">
                 {mobileProducts.slice(0, allMobile).map(product => (
                     <BoxProduct key={product.id} product={product} />
