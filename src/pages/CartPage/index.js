@@ -42,8 +42,8 @@ export default function CartPage() {
             alert('Your cart is empty');
         }
         else {
-            navigate('/checkout');
             clearSessionItem('cart');
+            navigate('/checkout');
         }
     }
     return (
