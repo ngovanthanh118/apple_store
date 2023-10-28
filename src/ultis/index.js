@@ -7,3 +7,4 @@ export function getSessionItem(key) {
 export function clearSessionItem(key) {
     return sessionStorage.removeItem(key);
 }
+ 
