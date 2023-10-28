@@ -5,18 +5,10 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { Context } from '../Contexts';
-import axios from 'axios';
-export default function Slide() {
-    const [data, setData] = useState([]);
+export default function Slide({product}) {
     const { addProduct } = useContext(Context);
-    useEffect(() => {
-        axios.get("/products")
-            .then(products => setData(products.data))
-            .catch(err => console.error(err))
-    }, []);
-
     return (
         <Swiper
             modules={[Pagination, Autoplay, EffectFade]}
@@ -28,7 +20,7 @@ export default function Slide() {
             }}
             effect="fade"
         >
-            {data.slice(0, 3).map(product => (
+            {product.slice(0, 3).map(product => (
                 <SwiperSlide key={product.id} className='slide'>
                     <div className='flex justify-around items-center p-8'>
                         <div className='flex flex-col'>

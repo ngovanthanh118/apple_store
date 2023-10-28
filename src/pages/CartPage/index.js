@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "../../components/Contexts";
 import { uniqBy } from "lodash";
 import { useNavigate } from "react-router-dom";
+import { clearSessionItem } from "../../ultis";
 export default function CartPage() {
     const { cartProducts, addProduct, removeProduct } = useContext(Context);
     const [product, setProduct] = useState([]);
@@ -42,6 +43,7 @@ export default function CartPage() {
         }
         else {
             navigate('/checkout');
+            clearSessionItem('cart');
         }
     }
     return (
