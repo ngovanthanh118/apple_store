@@ -2,9 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "../../components/Contexts";
 import { uniqBy } from "lodash";
 import { useNavigate } from "react-router-dom";
-import { clearSessionItem } from "../../ultis";
 export default function CartPage() {
-    const { cartProducts, addProduct, removeProduct } = useContext(Context);
+    const { cartProducts, setCartProducts, addProduct, removeProduct } = useContext(Context);
     const [product, setProduct] = useState([]);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -42,7 +41,7 @@ export default function CartPage() {
             alert('Your cart is empty');
         }
         else {
-            clearSessionItem('cart');
+            setCartProducts([]);
             navigate('/checkout');
         }
     }

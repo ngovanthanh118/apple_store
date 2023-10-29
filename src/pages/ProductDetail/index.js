@@ -10,7 +10,7 @@ export default function ProductDetail() {
     const [title, setTitle] = useState('');
     const [comment, setComment] = useState('');
     const [feedback, setFeedback] = useState([]);
-    const [postComment, setPostComment] = useState();
+    const [postComment, setPostComment] = useState('');
     var currentdate = new Date();
     var datetime = currentdate.getDate() + "-"
         + (currentdate.getMonth() + 1) + "-"
@@ -44,6 +44,7 @@ export default function ProductDetail() {
             .then(res => setPostComment(res.data))
             .catch(err => console.error(err))
     }
+    console.log(postComment)
     return (
         <div className="p-8">
             <div className="mt-26 flex justify-center gap-6">

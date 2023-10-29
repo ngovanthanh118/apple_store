@@ -5,8 +5,8 @@ export default function BoxProduct({ product }) {
     const { addProduct } = useContext(Context);
     const navigate = useNavigate();
     return (
-        <div className="flex flex-col p-1">
-            <div className="bg-white rounded-lg border-white border-2 border-solid relative box-product">
+        <div className="flex flex-col bg-white rounded-lg border-gray-300 border-2 border-solid shadow-md box-product">
+            <div className="relative ">
                 <img className="img-product cursor-pointer" src={product.img} alt='' onClick={() => navigate('/product/' + product.id)} />
                 <div className="absolute top-2 right-2 cursor-pointer" >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.1} stroke="currentColor" className="w-6 h-6 icon-like">
@@ -14,11 +14,11 @@ export default function BoxProduct({ product }) {
                     </svg>
                 </div>
             </div>
-            <div className="flex justify-between items-center px-1 py-2">
+            <div className="flex justify-between items-center border-t-2 border-gray-200 px-3 py-4">
                 <h3 className="text-black font-normal text-lg">{product.name}</h3>
                 <span className="text-black font-normal text-lg">{product.storage}</span>
             </div>
-            <div className="flex justify-between items-center px-1 py-1">
+            <div className="flex justify-between items-center px-3 pb-3">
                 <h1 className="font-bold text-2xl text-black">${product.price}</h1>
                 <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 cursor-pointer flex gap-2 items-center btn-add"
                     onClick={() => addProduct({ ...product })}
