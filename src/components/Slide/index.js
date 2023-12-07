@@ -7,7 +7,7 @@ import 'swiper/css/effect-fade';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { Context } from '../Contexts';
-export default function Slide({product}) {
+export default function Slide({ product }) {
     const { addProduct } = useContext(Context);
     return (
         <Swiper
@@ -21,7 +21,7 @@ export default function Slide({product}) {
             effect="fade"
         >
             {product.slice(0, 3).map(product => (
-                <SwiperSlide key={product.id} className='slide'>
+                <SwiperSlide key={product._id} className='slide'>
                     <div className='flex justify-around items-center p-8'>
                         <div className='flex flex-col'>
                             <h1 className='font-medium text-4xl text-white mb-6 opacity-90'>{product.name}</h1>
@@ -29,7 +29,7 @@ export default function Slide({product}) {
                                 {product.description}
                             </p>
                             <div className='flex gap-6 items-center'>
-                                <Link className='text-white font-medium outline outline-2 outline-white rounded-3xl cursor-pointer px-10 py-2 btn-read' to={'/product/' + product.id}>Read more</Link>
+                                <Link className='text-white font-medium outline outline-2 outline-white rounded-3xl cursor-pointer px-10 py-2 btn-read' to={'/product/' + product._id}>Read more</Link>
                                 <Link className='text-green-800 bg-white outline outline-transparent outline-2 rounded-3xl px-6 py-2 cursor-pointer font-medium flex gap-2 items-center btn-add'
                                     onClick={() => addProduct({ ...product })}
                                 >
@@ -37,10 +37,10 @@ export default function Slide({product}) {
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                                     </svg>
                                     <span>Add to cart</span>
-                                </Link> 
+                                </Link>
                             </div>
                         </div>
-                        <img src={product.img} width="600px" height="800px" alt="" />
+                        <img src={"http://localhost:4000/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
                     </div>
                 </SwiperSlide>
             ))}

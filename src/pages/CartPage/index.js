@@ -13,7 +13,7 @@ export default function CartPage() {
     const [country, setCountry] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
-        const filterCartById = uniqBy(cartProducts, "id");
+        const filterCartById = uniqBy(cartProducts, "_id");
         setProduct(filterCartById);
     }, [cartProducts]);
     useEffect(() => {
@@ -64,15 +64,15 @@ export default function CartPage() {
                             </thead>
                             <tbody>
                                 {product.map(product => (
-                                    <tr key={product.id}>
+                                    <tr key={product._id}>
                                         <td>
-                                            <img src={product.img} alt={product.img} />
+                                            <img src={"http://localhost:4000/api/v1/images/" +product.image} alt={product.img} />
                                             {product.name}
                                         </td>
                                         <td>
                                             <div>
                                                 <button onClick={() => removeThisProduct({ ...product })}>-</button>
-                                                <span>{cartProducts.filter(proc => proc.id === product.id).length}</span>
+                                                <span>{cartProducts.filter(proc => proc._id === product._id).length}</span>
                                                 <button onClick={() => moreOfThisProduct({ ...product })}>+</button>
                                             </div>
                                         </td>

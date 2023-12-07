@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ContextProvider } from './components/Contexts';
 import axios from 'axios';
-axios.defaults.baseURL = 'https://hlkj7z-8080.csb.app/';
+axios.defaults.baseURL = 'http://localhost:4000/api/v1';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

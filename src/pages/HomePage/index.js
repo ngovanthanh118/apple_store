@@ -6,7 +6,7 @@ export default function HomePage() {
     const [data, setData] = useState([]);
     useEffect(() => {
         axios.get("/products")
-            .then(products => setData(products.data))
+            .then(products => setData(products.data.data))
             .catch(err => console.error(err))
     }, []);
     return (

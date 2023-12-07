@@ -5,7 +5,7 @@ export default function Products() {
     const [data, setData] = useState([]);
     useEffect(() => {
         axios.get('/products')
-            .then((products) => setData(products.data))
+            .then((products) => setData(products.data.data))
             .catch((error) => console.error(error))
     }, []);
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function Products() {
             <h1 className="text-black font-bold text-4xl ml-16 pt-8 mb-4">All products</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full ">
                 {data.map(product => (
-                    <BoxProduct key={product.id} product={product} />
+                    <BoxProduct key={product._id} product={product} />
                 ))
                 }
             </div>

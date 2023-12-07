@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { Context } from "../../components/Contexts"
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ export default function AccountPage() {
     return (
         <div className="mt-26 flex justify-center items-center gap-8 p-12">
             <div>
-                <h1> Hi {accounts} !</h1>
+                <h1> Hi {accounts.name} !</h1>
             </div>
             <div>
                 <button className="flex items-center gap-2 p-3" onClick={handkeLoggout}>

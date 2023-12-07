@@ -4,12 +4,12 @@ export const Context = createContext({});
 
 export function ContextProvider({ children }) {
     const [cartProducts, setCartProducts] = useState(getSessionItem('cart') || []);
-    const [accounts, setAccounts] = useState();
+    const [accounts, setAccounts] = useState({});
     useEffect(() => {
-        if(cartProducts?.length > 0) {
+        if (cartProducts?.length > 0) {
             setSessionItem('cart', cartProducts);
         }
-        else(
+        else (
             clearSessionItem('cart')
         )
     }, [cartProducts])
@@ -18,15 +18,15 @@ export function ContextProvider({ children }) {
     }
     const removeProduct = (product) => {
         setCartProducts(prev => {
-            const pos = prev.findIndex((proc) => proc.id === product.id);
-            if(pos !== -1) {
+            const pos = prev.findIndex(proc => proc._id === product._id);
+            if (pos !== -1) {
                 return prev.filter((proc, index) => index !== pos);
             }
             return prev;
         })
     }
     return (
-        <Context.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct,accounts, setAccounts }}>
+        <Context.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct, accounts, setAccounts }}>
             {children}
         </Context.Provider>
     );

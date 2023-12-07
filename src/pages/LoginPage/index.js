@@ -5,29 +5,22 @@ import { Context } from '../../components/Contexts';
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [data, setData] = useState('');
-    const {setAccounts} = useContext(Context)
+    const { setAccounts } = useContext(Context)
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get('/accounts')
-            .then(accounts => setData(accounts.data))
-            .catch(err => console.error(err));
-    }, [])
-    useEffect(() => {
-        window.scroll(0,0);
+        window.scroll(0, 0);
     }, []);
     const handleLogin = (ev) => {
         ev.preventDefault();
-        const isAccount = data.some(acc => acc.email === email && acc.password === password);
-        if (isAccount) {
-            alert('Logged in successfully!');
-            const findAccount = data.find(acc => acc.email === email);
-            setAccounts(findAccount.name);
-            navigate('/');
-        }
-        else {
-            alert('Account or password is incorrect!');
-        }
+        axios.post('/users/login', {
+            email: email,
+            password: password
+        })
+            .then(res => {
+                setAccounts(res.data.data);
+                navigate('/');
+            })
+            .catch(err => console.error(err));
     }
     return (
         <div className="flex flex-col items-center mx-auto p-8 min-h-screen">

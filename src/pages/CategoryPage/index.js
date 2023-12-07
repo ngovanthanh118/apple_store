@@ -11,7 +11,7 @@ export default function Categories() {
     }, []);
     useEffect(() => {
         axios.get('/products')
-            .then(res => setProducts(res.data))
+            .then(res => setProducts(res.data.data))
             .catch(err => console.error(err))
     }, [])
     const mobileProducts = products.filter(product => product.type === "mobile");
@@ -23,7 +23,7 @@ export default function Categories() {
             <h1 className="font-bold my-2 text-3xl">Mobiles</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full">
                 {mobileProducts.slice(0, allMobile).map(product => (
-                    <BoxProduct key={product.id} product={product} />
+                    <BoxProduct key={product._id} product={product} />
                 ))}
                 {allMobile !== mobileProducts.length &&
                     (<button className="flex items-center gap-4 justify-center btn-all" onClick={() => setAllMobile(mobileProducts.length)}>
@@ -38,7 +38,7 @@ export default function Categories() {
             <h1 className="font-bold mt-8 mb-5 text-3xl">Macbooks</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full">
                 {macProducts.slice(0, allMac).map((product, index) => (
-                    <BoxProduct key={product.id} product={product} />
+                    <BoxProduct key={product._id} product={product} />
                 ))}
                 {allMac !== macProducts.length &&
                     (<button className="flex items-center gap-4 justify-center btn-all" onClick={() => setAllMac(macProducts.length)}>
@@ -52,7 +52,7 @@ export default function Categories() {
             <h1 className="font-bold mt-8 mb-5 text-3xl">Ipads</h1>
             <div className="grid grid-cols-4 gap-6 px-6 w-full">
                 {ipadProducts.slice(0, allIpad).map((product, index) => (
-                    <BoxProduct key={product.id} product={product} />
+                    <BoxProduct key={product._id} product={product} />
                 ))}
                 {allIpad !== ipadProducts.length &&
                     (<button className="flex items-center gap-4 justify-center btn-all" onClick={() => setAllIpad(ipadProducts.length)}>
