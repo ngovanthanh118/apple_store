@@ -81,7 +81,7 @@ export default function AccountPage() {
                                 </label>
                             </div>
                         </div> :
-                        <img src={"http://localhost:4000/api/v1/images/" + accounts.image} />
+                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + accounts.image} />
                     }
                 </div>
                 <div className="flex flex-col overflow-hidden">

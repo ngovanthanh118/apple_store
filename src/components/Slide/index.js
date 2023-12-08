@@ -40,7 +40,7 @@ export default function Slide({ product }) {
                                 </Link>
                             </div>
                         </div>
-                        <img src={"http://localhost:4000/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
+                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
                     </div>
                 </SwiperSlide>
             ))}

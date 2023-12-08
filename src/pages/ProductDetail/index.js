@@ -35,7 +35,7 @@ export default function ProductDetail() {
         <div className="p-8">
             <div className="mt-26 flex gap-6">
                 <div className="bg-white rounded-xl">
-                    <img src={"http://localhost:4000/api/v1/images/" + data.image} alt="" />
+                    <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + data.image} alt="" />
                 </div>
                 <div className="p-4">
                     <h1 className="text-3xl font-bold">{data.name}</h1>
