@@ -23,7 +23,7 @@ export default function LoginPage() {
             })
             .catch(err => console.error(err));
     }
- 
+
     return (
         <div className="flex flex-col items-center mx-auto p-8 min-h-screen">
             <h1 className="text-center text-4xl my-4 font-bold">Login</h1>
