@@ -19,7 +19,12 @@ export default function LoginPage() {
         })
             .then(res => {
                 setCookie("token", res.data.token);
-                navigate('/');
+                if (res.data.admin) {
+                    window.location = 'https://apple-store-dashboard-60fb324dec5b.herokuapp.com';
+                }
+                else {
+                    navigate('/');
+                }
             })
             .catch(err => console.error(err));
     }
