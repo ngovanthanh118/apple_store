@@ -28,6 +28,16 @@ export default function CartPage() {
     const total = cartProducts.reduce((acc, curr) => {
         return acc + parseInt(curr.price);
     }, 0)
+    const quantityProduct = (procduct) => {
+        return cartProducts.filter(proc => proc._id === procduct._id).length;
+    }
+    const filterCart = () => {
+        const newCart = product.map(proc => {
+            const quantity = quantityProduct(proc);
+            return { ...proc, quantity };
+        })
+        return newCart;
+    }
     const handleCheckout = () => {
         if (name === '' ||
             email === '' ||
@@ -45,6 +55,7 @@ export default function CartPage() {
             navigate('/checkout');
         }
     }
+
     return (
         <div className="grid grid-cols-3 gap-10 p-8 min-h-screen">
             <div className="col-span-2 bg-white rounded-lg p-8 h-max">
@@ -66,18 +77,18 @@ export default function CartPage() {
                                 {product.map(product => (
                                     <tr key={product._id}>
                                         <td>
-                                            <img src={"http://localhost:4000/api/v1/images/" +product.image} alt={product.img} />
+                                            <img src={"http://localhost:4000/api/v1/images/" + product.image} alt={product.img} />
                                             {product.name}
                                         </td>
                                         <td>
                                             <div>
                                                 <button onClick={() => removeThisProduct({ ...product })}>-</button>
-                                                <span>{cartProducts.filter(proc => proc._id === product._id).length}</span>
+                                                <span>{quantityProduct(product)}</span>
                                                 <button onClick={() => moreOfThisProduct({ ...product })}>+</button>
                                             </div>
                                         </td>
                                         <td>
-                                            ${product.price * cartProducts.filter(proc => proc.id === product.id).length}
+                                            ${product.price * quantityProduct(product)}
                                         </td>
                                     </tr>
                                 ))}

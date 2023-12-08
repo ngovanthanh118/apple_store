@@ -1,10 +1,33 @@
-export function setSessionItem(key, value) {
+export const setSessionItem = (key, value) => {
     return sessionStorage.setItem(key, JSON.stringify(value));
 }
-export function getSessionItem(key) {
+export const getSessionItem = (key) => {
     return JSON.parse(sessionStorage.getItem(key));
 }
-export function clearSessionItem(key) {
+export const clearSessionItem = (key) => {
     return sessionStorage.removeItem(key);
 }
- 
+export const setCookie = (cname, cvalue, exdays) => {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+export const getCookie = (cname) => {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+export const removeCookie = (cname) => {
+    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}

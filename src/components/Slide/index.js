@@ -20,7 +20,7 @@ export default function Slide({ product }) {
             }}
             effect="fade"
         >
-            {product.slice(0, 3).map(product => (
+            {product.map(product => (
                 <SwiperSlide key={product._id} className='slide'>
                     <div className='flex justify-around items-center p-8'>
                         <div className='flex flex-col'>
