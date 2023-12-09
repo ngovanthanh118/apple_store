@@ -21,7 +21,7 @@ export default function Categories() {
     return (
         <div className="mt-28 px-8 py-4 min-h-screen">
             <h1 className="font-bold my-2 text-3xl">Mobiles</h1>
-            <div className="grid grid-cols-4 gap-6 px-6 w-full">
+            <div className="mobile-category grid grid-cols-4 gap-6 px-6 w-full">
                 {mobileProducts.slice(0, allMobile).map(product => (
                     <BoxProduct key={product._id} product={product} />
                 ))}
@@ -36,7 +36,7 @@ export default function Categories() {
 
             </div>
             <h1 className="font-bold mt-8 mb-5 text-3xl">Macbooks</h1>
-            <div className="grid grid-cols-4 gap-6 px-6 w-full">
+            <div className="mobile-category grid grid-cols-4 gap-6 px-6 w-full">
                 {macProducts.slice(0, allMac).map((product, index) => (
                     <BoxProduct key={product._id} product={product} />
                 ))}
@@ -50,7 +50,7 @@ export default function Categories() {
                 }
             </div>
             <h1 className="font-bold mt-8 mb-5 text-3xl">Ipads</h1>
-            <div className="grid grid-cols-4 gap-6 px-6 w-full">
+            <div className="mobile-category grid grid-cols-4 gap-6 px-6 w-full">
                 {ipadProducts.slice(0, allIpad).map((product, index) => (
                     <BoxProduct key={product._id} product={product} />
                 ))}

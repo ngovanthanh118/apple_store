@@ -33,7 +33,7 @@ export default function ProductDetail() {
     }
     return (
         <div className="p-8">
-            <div className="mt-26 flex gap-6">
+            <div className="mobile-product-detail mt-26 flex gap-6">
                 <div className="bg-white rounded-xl">
                     <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + data.image} alt="" />
                 </div>
@@ -55,8 +55,8 @@ export default function ProductDetail() {
             </div>
             <div>
                 <h1 className="text-3xl font-bold my-4">Reviews</h1>
-                <div className="flex justify-around ">
-                    <div className="bg-white px-8 py-10 rounded-xl h-max">
+                <div className="mobile-product-review flex justify-around">
+                    <div className="bg-white px-8 py-10 rounded-xl h-max my-4">
                         <h1 className="text-2xl font-bold my-2">Add a review</h1>
                         <form onSubmit={handleComment}>
                             <input type="text" placeholder="Title" value={title} onChange={(ev) => setTitle(ev.target.value)} />
@@ -64,13 +64,13 @@ export default function ProductDetail() {
                             <button className="bg-green-900 text-white rounded-xl mt-4">Submit your review</button>
                         </form>
                     </div>
-                    <div className="bg-white p-8 rounded-xl w-2/4">
+                    <div className="mobile-product-review bg-white p-8 rounded-xl w-2/4">
                         <h1 className="text-2xl font-bold my-2">All reviews</h1>
                         {!comments.length && (
                             <p className="p-4">No comment</p>
                         )}
                         {comments.length > 0 && comments.map(cmt => (
-                            <div key={cmt._id} className="p-4 flex flex-col gap-4 border-t-2 border-gray-200 border-solid">
+                            <div key={cmt._id} className=" p-4 flex flex-col gap-4 border-t-2 border-gray-200 border-solid">
                                 <div className="flex justify-between item-center">
                                     <h1 className="text-lg font-normal">{cmt.title}</h1>
                                     <span className="text-base font-normal text-gray-400">{cmt.date}</span>

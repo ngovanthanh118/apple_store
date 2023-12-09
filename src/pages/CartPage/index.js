@@ -57,7 +57,7 @@ export default function CartPage() {
     }
 
     return (
-        <div className="grid grid-cols-3 gap-10 p-8 min-h-screen">
+        <div className="mobile-cart-page grid grid-cols-3 gap-10 p-8 min-h-screen">
             <div className="col-span-2 bg-white rounded-lg p-8 h-max">
                 <h2 className="font-bold mb-8 text-left text-4xl">Cart</h2>
                 <div>

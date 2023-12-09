@@ -18,7 +18,7 @@ export default function BoxProduct({ product }) {
                 <h3 className="text-black font-normal text-lg">{product.name}</h3>
                 <span className="text-black font-normal text-lg">{product.storage}</span>
             </div>
-            <div className="flex justify-between items-center px-3 pb-3">
+            <div className="mobile-add-cart flex justify-between items-center px-3 pb-3">
                 <h1 className="font-bold text-2xl text-black">${product.price}</h1>
                 <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 cursor-pointer flex gap-2 items-center btn-add"
                     onClick={() => addProduct({ ...product })}
