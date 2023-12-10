@@ -97,7 +97,16 @@ header,
         width: 100%;
         padding: 24px;
     }
-    nav.mobile-nav-link{
+    nav.mobile-nav-link,
+    .mobile-nav-search{
+        display: none;
+        
+    }
+    .mobile-nav-search.active{
+        display: block;
+    }
+    nav.mobile-nav-link.active{
+        display: flex;
         flex-direction: column;
         gap: 20px;
         padding: 16px 0;
