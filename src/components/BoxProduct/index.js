@@ -20,7 +20,7 @@ export default function BoxProduct({ product }) {
             </div>
             <div className="mobile-add-cart flex justify-between items-center px-3 pb-3">
                 <h1 className="font-bold text-2xl text-black">${product.price}</h1>
-                <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 cursor-pointer flex gap-2 items-center btn-add"
+                <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 ml-3 cursor-pointer flex gap-2 items-center btn-add"
                     onClick={() => addProduct({ ...product })}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

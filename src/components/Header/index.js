@@ -1,10 +1,15 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Context } from "../Contexts";
 import { getCookie } from "../../ultis";
 export default function Header() {
     const { cartProducts } = useContext(Context);
     const [mobileNav, setMobileNav] = useState(false);
+    useEffect(() => {
+        if (window.innerWidth < 768) {
+            setMobileNav(true)
+        }
+    }, [])
     return (
         <header className="mobile-header flex justify-between items-center p-10 fixed w-full z-10 top-0">
             <Link className="text-white text-xl font-bold" to='/'>Apple Store</Link>

@@ -81,7 +81,7 @@ export default function CartPage() {
                                             {product.name}
                                         </td>
                                         <td>
-                                            <div>
+                                            <div className="mobile-quantity flex items-center">
                                                 <button onClick={() => removeThisProduct({ ...product })}>-</button>
                                                 <span>{quantityProduct(product)}</span>
                                                 <button onClick={() => moreOfThisProduct({ ...product })}>+</button>
