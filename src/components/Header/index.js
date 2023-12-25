@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Context } from "../Contexts";
 import { getCookie } from "../../ultis";
 export default function Header() {
-    const { cartProducts } = useContext(Context);
+    const { cartProducts, accounts } = useContext(Context);
     const btnNavElement = useRef();
     const navElement = useRef();
     const searchElement = useRef();
@@ -24,7 +24,7 @@ export default function Header() {
                 <NavLink onClick={handleClick} to='/'>Home</NavLink>
                 <NavLink onClick={handleClick} to='/products'>All products</NavLink>
                 <NavLink onClick={handleClick} to='/categories'>Categories</NavLink>
-                <NavLink onClick={handleClick} to={getCookie("token") ? '/account' : '/login'}>Account</NavLink>
+                <NavLink onClick={handleClick} to={accounts ? '/account' : '/login'}>Account</NavLink>
                 <NavLink onClick={handleClick} to='/cart'>Cart ({cartProducts.length})</NavLink>
             </nav>
             <div ref={searchElement} className="mobile-nav-search bg-inherit w-2">

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { Context } from "../../components/Contexts"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { removeCookie } from "../../ultis";
+import { getCookie, removeCookie } from "../../ultis";
 
 export default function AccountPage() {
     const { accounts, setAccounts } = useContext(Context);
@@ -17,7 +17,9 @@ export default function AccountPage() {
     const navigate = useNavigate();
     const loadAccount = () => {
         axios.get('/users', {
-            withCredentials: true
+            headers: {
+                token: getCookie("token")
+            }
         })
             .then(res => {
                 const user = res.data.data;
@@ -48,9 +50,12 @@ export default function AccountPage() {
             formData.append('image', image);
         }
         axios.put('/users/' + accounts._id, formData, {
-            withCredentials: true
+            headers: {
+                token: getCookie("token")
+            }
         })
             .then(res => {
+                loadAccount();
                 setAccounts(res.data.data);
                 setEditName(false);
                 setEditPhone(false);
