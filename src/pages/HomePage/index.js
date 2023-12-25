@@ -1,7 +1,6 @@
 import Slide from "../../components/Slide"
 import NewProducts from "../../components/NewProducts"
 import { useState, useEffect } from "react";
-import { ClipLoader } from "react-spinners";
 import axios from "axios";
 export default function HomePage() {
     const [data, setData] = useState([]);
