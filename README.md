@@ -1,5 +1,5 @@
 # Link to website 
-    https://apple-store-project-a7035d576f80.herokuapp.com/
+    https://apple-store-woad.vercel.app
 # Account admin
     email: admin@gmail.com
     password: admin
