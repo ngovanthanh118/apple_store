@@ -71,7 +71,7 @@ export default function CartPage() {
                                 {product.map(product => (
                                     <tr key={product._id}>
                                         <td>
-                                            <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + product.image} alt={product.img} />
+                                            <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} alt={product.img} />
                                             {product.name}
                                         </td>
                                         <td>
