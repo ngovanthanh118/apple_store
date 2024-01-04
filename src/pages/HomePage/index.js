@@ -16,8 +16,8 @@ export default function HomePage() {
     }, []);
     return (
         <div>
-            <Slide product={data.slice(0, 3)} />
-            <NewProducts product={data.filter(proc => proc.status === "New")} />
+            <Slide products={data.slice(0, 3)} />
+            <NewProducts products={data.filter(proc => proc.status === "New")} />
         </div>
     )
 }

@@ -7,7 +7,7 @@ import 'swiper/css/effect-fade';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { Context } from '../Contexts';
-export default function Slide({ product }) {
+export default function Slide({ products }) {
     const { addProduct } = useContext(Context);
     return (
         <Swiper
@@ -20,7 +20,7 @@ export default function Slide({ product }) {
             }}
             effect="fade"
         >
-            {product.map(product => (
+            {products.map(product => (
                 <SwiperSlide key={product._id} className='slide'>
                     <div className='mobile-slide flex justify-around items-center p-8'>
                         <div className='flex flex-col'>
@@ -40,7 +40,7 @@ export default function Slide({ product }) {
                                 </Link>
                             </div>
                         </div>
-                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
+                        <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
                     </div>
                 </SwiperSlide>
             ))}

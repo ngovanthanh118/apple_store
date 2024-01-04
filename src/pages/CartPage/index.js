@@ -5,12 +5,9 @@ import { useNavigate } from "react-router-dom";
 export default function CartPage() {
     const { cartProducts, setCartProducts, addProduct, removeProduct } = useContext(Context);
     const [product, setProduct] = useState([]);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [city, setCity] = useState('');
-    const [postalCode, setPostalCode] = useState('');
+    const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
-    const [country, setCountry] = useState('');
+    const [note, setNote] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         const filterCartById = uniqBy(cartProducts, "_id");
@@ -39,12 +36,9 @@ export default function CartPage() {
         return newCart;
     }
     const handleCheckout = () => {
-        if (name === '' ||
-            email === '' ||
-            city === '' ||
-            postalCode === '' ||
+        if (
             address === '' ||
-            country === '') {
+            note === '' || phone === '') {
             alert('Please enter complete information');
         }
         else if (cartProducts.length === 0) {
@@ -105,37 +99,18 @@ export default function CartPage() {
                 <h2 className="font-bold text-4xl text-center mb-6">Order infomation</h2>
                 <div>
                     <input type="text"
-                        placeholder="Name"
-                        value={name}
-                        onChange={ev => setName(ev.target.value)}
+                        placeholder="Phone"
+                        value={phone}
+                        onChange={ev => setPhone(ev.target.value)}
                     />
-                    <input type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={ev => setEmail(ev.target.value)}
-                    />
-                    <div className="flex gap-2">
-                        <input type="text"
-                            placeholder="City"
-                            value={city}
-                            onChange={ev => setCity(ev.target.value)}
-                        />
-                        <input type="text"
-                            placeholder="Postal Code"
-                            value={postalCode}
-                            onChange={ev => setPostalCode(ev.target.value)}
-                        />
-                    </div>
                     <input type="text"
-                        placeholder="Street Address"
+                        placeholder="Address"
                         value={address}
                         onChange={ev => setAddress(ev.target.value)}
                     />
-                    <input type="text"
-                        placeholder="Country"
-                        value={country}
-                        onChange={ev => setCountry(ev.target.value)}
-                    />
+                    <textarea placeholder="Note" onChange={ev => setNote(ev.target.value)}>
+                        {note}
+                    </textarea>
                 </div>
                 <button className="bg-green-900 text-white font-base p-3 mt-4" onClick={handleCheckout}>Continue to payment</button>
             </div>

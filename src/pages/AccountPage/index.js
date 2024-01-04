@@ -24,10 +24,6 @@ export default function AccountPage() {
             .then(res => {
                 const user = res.data.data;
                 setAccounts(user);
-                setName(user.name);
-                setPhone(user.phone);
-                setAddress(user.address);
-                setImage(user.image);
             })
             .catch(err => console.log(err))
     }
@@ -86,7 +82,7 @@ export default function AccountPage() {
                                 </label>
                             </div>
                         </div> :
-                        <img src={"https://apple-store-server-8705f39d5697.herokuapp.com/api/v1/images/" + accounts.image} />
+                        <img src={"https://apple-store-server.vercel.app/api/v1/images/" + accounts.image} />
                     }
                 </div>
                 <div className="flex flex-col overflow-hidden">
