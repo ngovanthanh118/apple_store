@@ -1,7 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Context } from "../Contexts";
-import { getCookie } from "../../ultis";
 export default function Header() {
     const { cartProducts, accounts } = useContext(Context);
     const btnNavElement = useRef();
@@ -14,12 +13,12 @@ export default function Header() {
     useEffect(() => {
         btnNavElement.current.addEventListener('click', handleClick);
         return () => {
-            btnNavElement.current.removeEventListener('click', handleClick)
+            btnNavElement.current.removeEventListener('click', handleClick);
         }
     }, [])
     return (
         <header className="mobile-header flex justify-between items-center p-10 fixed w-full z-10 top-0">
-            <Link onClick={handleClick} className="text-white text-xl font-bold" to='/'>Apple Store</Link>
+            <Link className="text-white text-xl font-bold" to='/'>Apple Store</Link>
             <nav ref={navElement} className="mobile-nav-link flex gap-10 text-white opacity-60">
                 <NavLink onClick={handleClick} to='/'>Home</NavLink>
                 <NavLink onClick={handleClick} to='/products'>All products</NavLink>

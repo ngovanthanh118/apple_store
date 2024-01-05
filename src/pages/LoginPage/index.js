@@ -31,16 +31,18 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex flex-col items-center mx-auto p-8 min-h-screen">
-            <h1 className="text-center text-4xl my-4 font-bold">Login</h1>
-            <form className="max-w-md" onSubmit={handleLogin}>
-                <input type="email" placeholder="your@email.com" value={email} onChange={ev => setEmail(ev.target.value)} />
-                <input type="password" placeholder="password" value={password} onChange={ev => setPassword(ev.target.value)} />
-                <button>Login</button>
-            </form>
-            <span className="mt-4">Don't have an account yet?
-                <Link className='ml-2 text-sky-500' to="/register">Register now</Link>
-            </span>
+        <div className="flex justify-center items-center p-8 min-h-screen">
+            <div className="flex flex-col items-center">
+                <h1 className="text-center text-4xl my-4 font-bold">Login</h1>
+                <form className="max-w-md" onSubmit={handleLogin}>
+                    <input type="email" placeholder="your@email.com" value={email} onChange={ev => setEmail(ev.target.value)} />
+                    <input type="password" placeholder="password" value={password} onChange={ev => setPassword(ev.target.value)} />
+                    <button>Login</button>
+                </form>
+                <span className="mt-4">Don't have an account yet?
+                    <Link className='ml-2 text-sky-500' to="/register">Register now</Link>
+                </span>
+            </div>
         </div>
     )
 }

@@ -14,7 +14,7 @@ export default function Products() {
     return (
         <div className="bg-gray-200 min-h-screen">
             <h1 className="text-black font-bold text-4xl ml-16 pt-8 mb-4">All products</h1>
-            <div className="mobile-all-product grid grid-cols-4 gap-6 px-6 w-full ">
+            <div className="mobile-all-product grid grid-cols-4 gap-4 px-6 w-full ">
                 {data.map(product => (
                     <BoxProduct key={product._id} product={product} />
                 ))

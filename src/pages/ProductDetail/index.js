@@ -54,7 +54,7 @@ export default function ProductDetail() {
                 </div>
             </div>
             <div>
-                <h1 className="text-3xl font-bold my-2">Reviews</h1>
+                <h1 className="text-3xl font-bold my-4">Reviews</h1>
                 <div className="mobile-product-review flex gap-4 justify-around">
                     <div className="bg-white px-8 py-10 rounded-xl h-max mb-4">
                         <h1 className="text-2xl font-bold my-2">Add a review</h1>

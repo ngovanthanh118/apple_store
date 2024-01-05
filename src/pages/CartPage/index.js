@@ -15,6 +15,7 @@ export default function CartPage() {
     }, [cartProducts]);
     useEffect(() => {
         window.scroll(0, 0);
+        
     }, []);
     const moreOfThisProduct = (product) => {
         addProduct(product);
@@ -49,9 +50,9 @@ export default function CartPage() {
             navigate('/checkout');
         }
     }
-
+    
     return (
-        <div className="mobile-cart-page grid grid-cols-3 gap-10 p-8 min-h-screen">
+        <div className="mobile-cart-page grid grid-cols-3 gap-10 p-10 min-h-screen">
             <div className="col-span-2 bg-white rounded-lg p-8 h-max">
                 <h2 className="font-bold mb-8 text-left text-4xl">Cart</h2>
                 <div>
@@ -68,7 +69,7 @@ export default function CartPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {product.map(product => (
+                                {filterCart().map(product => (
                                     <tr key={product._id}>
                                         <td>
                                             <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} alt={product.img} />
@@ -77,7 +78,7 @@ export default function CartPage() {
                                         <td>
                                             <div className="mobile-quantity flex items-center">
                                                 <button onClick={() => removeThisProduct({ ...product })}>-</button>
-                                                <span>{quantityProduct(product)}</span>
+                                                <span>{product.quantity}</span>
                                                 <button onClick={() => moreOfThisProduct({ ...product })}>+</button>
                                             </div>
                                         </td>
@@ -108,7 +109,7 @@ export default function CartPage() {
                         value={address}
                         onChange={ev => setAddress(ev.target.value)}
                     />
-                    <textarea placeholder="Note" onChange={ev => setNote(ev.target.value)}>
+                    <textarea value="" placeholder="Note" onChange={ev => setNote(ev.target.value)}>
                         {note}
                     </textarea>
                 </div>

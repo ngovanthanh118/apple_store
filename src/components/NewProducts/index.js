@@ -1,20 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BoxProduct from "../BoxProduct";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 export default function NewProducts({ products }) {
+    const [slidePreview, setSlidePreview] = useState(4);
     useEffect(() => {
         window.scroll(0, 0);
     }, []);
+    useEffect(() => {
+        if (window.innerWidth <= 767) {
+            setSlidePreview(1);
+        }
+        if (window.innerWidth >= 768 && window.innerWidth <= 1023) {
+            setSlidePreview(3);
+        }
+    }, []);
+    //mobile 1
+    //tablet 3
     return (
-        <div className="p-8 bg-gray-200 min-h-screen">
-            <h1 className="text-black font-normal text-4xl my-2">New Products</h1>
+        <div id="new-product">
+            <h1 className="font-bold text-4xl text-gray-800 text-center my-6">New Products</h1>
             <Swiper
                 modules={[Navigation]}
-                slidesPerView={4}
-                spaceBetween={20}
+                slidesPerView={slidePreview}
                 navigation={{
                     enabled: true,
                 }}

@@ -22,7 +22,7 @@ export default function Slide({ products }) {
         >
             {products.map(product => (
                 <SwiperSlide key={product._id} className='slide'>
-                    <div className='mobile-slide flex justify-around items-center p-8'>
+                    <div id="slide" className='mobile-slide flex justify-around items-center p-8'>
                         <div className='flex flex-col'>
                             <h1 className='font-medium text-4xl text-white mb-6 opacity-90'>{product.name}</h1>
                             <p className='max-w-xl text-justify text-white text-base mb-7 opacity-60 leading-7'>

@@ -5,7 +5,7 @@ export default function BoxProduct({ product }) {
     const { addProduct } = useContext(Context);
     const navigate = useNavigate();
     return (
-        <div className="flex flex-col bg-white rounded-lg border-gray-300 border-2 border-solid shadow-md box-product">
+        <div className="flex flex-col bg-white rounded-lg border-gray-300 border-2 border-solid shadow-md m-2 box-product">
             <div className="relative ">
                 <img className="img-product cursor-pointer" src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} alt='' onClick={() => navigate('/product/' + product._id)} />
                 <div className="absolute top-2 right-2 cursor-pointer" >
