@@ -4,7 +4,7 @@ export const Context = createContext({});
 
 export function ContextProvider({ children }) {
     const [cartProducts, setCartProducts] = useState(getSessionItem('cart') || []);
-    const [accounts, setAccounts] = useState({});
+    const [accounts, setAccounts] = useState('');
     useEffect(() => {
         if (cartProducts?.length > 0) {
             setSessionItem('cart', cartProducts);

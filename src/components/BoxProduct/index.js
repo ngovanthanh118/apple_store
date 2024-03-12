@@ -13,13 +13,24 @@ export default function BoxProduct({ product }) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg>
                 </div>
+                {product?.discount > 0 &&
+                    <div className="absolute left-2 top-2">
+                        {Math.round(100 - (product?.discount / product.price * 100))} %
+                    </div>
+                }
             </div>
             <div className="flex justify-between items-center border-t-2 border-gray-200 px-3 py-4">
                 <h3 className="text-black font-normal text-lg">{product.name}</h3>
                 <span className="text-black font-normal text-lg">{product.storage}</span>
             </div>
             <div className="mobile-add-cart flex justify-between items-center px-3 pb-3">
-                <h1 className="font-bold text-2xl text-black">${product.price}</h1>
+                {product?.discount > 0 ?
+                    <div className="flex gap-2">
+                        <h1 className="font-bold text-xl text-red-700 line-through">${product.price}</h1>
+                        <h1 className="font-bold text-xl text-black">${product.discount}</h1>
+                    </div> :
+                    <h1 className="font-bold text-xl text-black">${product.price}</h1>
+                }
                 <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 ml-3 cursor-pointer flex gap-2 items-center btn-add"
                     onClick={() => addProduct({ ...product })}
                 >

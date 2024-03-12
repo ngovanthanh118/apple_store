@@ -4,7 +4,7 @@ import BoxProduct from "../../components/BoxProduct";
 export default function Products() {
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get('/products')
+        axios.get('/products/list')
             .then((products) => setData(products.data.data))
             .catch((error) => console.error(error))
     }, []);

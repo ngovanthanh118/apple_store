@@ -10,7 +10,11 @@ export default function Footer() {
                         </svg>
                         <Link className="text-white text-xl font-bold" to='/'>Apple Store</Link>
                     </div>
-                    <h1 className="text-white font-normal text-base text-center">Think Different</h1>
+                    <h1 className="text-white font-normal text-base px-2">Think Different</h1>
+                    <form className="flex items-center gap-2">
+                        <input type="text" className="h-8" placeholder="Email" />
+                        <button className="bg-inherit w-24 rounded">Subcribe</button>
+                    </form>
                 </div>
                 <div className="flex flex-col gap-4 text-white text-base">
                     <Link to="/">Store</Link>
@@ -31,16 +35,16 @@ export default function Footer() {
                 <p>Copyright © 2024 Apple Inc.</p>
                 <div className="flex items-center gap-6 py-4">
                     <Link to="#" className="text-white text-xl">
-                        <i class="fa-brands fa-facebook"></i>
+                        <i className="fa-brands fa-facebook"></i>
                     </Link>
                     <Link to="#" className="text-white text-xl">
-                        <i class="fa-brands fa-instagram"></i>
+                        <i className="fa-brands fa-instagram"></i>
                     </Link>
                     <Link to="#" className="text-white text-xl">
-                        <i class="fa-brands fa-twitter"></i>
+                        <i className="fa-brands fa-twitter"></i>
                     </Link>
                     <Link to="#" className="text-white text-xl">
-                        <i class="fa-brands fa-youtube"></i>
+                        <i className="fa-brands fa-youtube"></i>
                     </Link>
                 </div>
             </div>

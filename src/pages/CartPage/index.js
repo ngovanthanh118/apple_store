@@ -1,10 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { Context } from "../../components/Contexts";
-import { uniqBy } from "lodash";
+import { isString, uniqBy } from "lodash";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 export default function CartPage() {
-    const { cartProducts, setCartProducts, addProduct, removeProduct } = useContext(Context);
+    const { cartProducts, setCartProducts, addProduct, removeProduct, accounts } = useContext(Context);
     const [product, setProduct] = useState([]);
+    const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [note, setNote] = useState('');
@@ -15,7 +17,7 @@ export default function CartPage() {
     }, [cartProducts]);
     useEffect(() => {
         window.scroll(0, 0);
-        
+
     }, []);
     const moreOfThisProduct = (product) => {
         addProduct(product);
@@ -23,20 +25,31 @@ export default function CartPage() {
     const removeThisProduct = (product) => {
         removeProduct(product)
     }
-    const total = cartProducts.reduce((acc, curr) => {
-        return acc + parseInt(curr.price);
-    }, 0)
+    const total = useMemo(() => {
+        const totalPrice = cartProducts.reduce((acc, curr) => {
+            return acc + parseInt(curr.price);
+        }, 0)
+        return totalPrice;
+    }, [cartProducts]);
     const quantityProduct = (procduct) => {
         return cartProducts.filter(proc => proc._id === procduct._id).length;
     }
-    const filterCart = () => {
+    const filterCart = useMemo(() => {
         const newCart = product.map(proc => {
             const quantity = quantityProduct(proc);
             return { ...proc, quantity };
         })
         return newCart;
-    }
-    const handleCheckout = () => {
+    }, [product])
+    const handleCheckout = async () => {
+        const orderPost = {
+            user_id: accounts._id || accounts,
+            name: name,
+            phone: phone,
+            address: address,
+            details: filterCart,
+            note: note
+        }
         if (
             address === '' ||
             note === '' || phone === '') {
@@ -45,12 +58,18 @@ export default function CartPage() {
         else if (cartProducts.length === 0) {
             alert('Your cart is empty');
         }
+        else if (!!!accounts) {
+            alert('Please login to checkout!');
+        }
         else {
-            setCartProducts([]);
-            navigate('/checkout');
+            axios.post('/orders', orderPost)
+                .then(res => {
+                    navigate('/checkout');
+                    setCartProducts([]);
+                })
+                .catch(err => console.log(err))
         }
     }
-    
     return (
         <div className="mobile-cart-page grid grid-cols-3 gap-10 p-10 min-h-screen">
             <div className="col-span-2 bg-white rounded-lg p-8 h-max">
@@ -69,7 +88,7 @@ export default function CartPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filterCart().map(product => (
+                                {filterCart?.map(product => (
                                     <tr key={product._id}>
                                         <td>
                                             <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} alt={product.img} />
@@ -100,6 +119,11 @@ export default function CartPage() {
                 <h2 className="font-bold text-4xl text-center mb-6">Order infomation</h2>
                 <div>
                     <input type="text"
+                        placeholder="Name"
+                        value={name}
+                        onChange={ev => setName(ev.target.value)}
+                    />
+                    <input type="text"
                         placeholder="Phone"
                         value={phone}
                         onChange={ev => setPhone(ev.target.value)}
@@ -109,7 +133,7 @@ export default function CartPage() {
                         value={address}
                         onChange={ev => setAddress(ev.target.value)}
                     />
-                    <textarea value="" placeholder="Note" onChange={ev => setNote(ev.target.value)}>
+                    <textarea value={note} placeholder="Note" onChange={ev => setNote(ev.target.value)}>
                         {note}
                     </textarea>
                 </div>
