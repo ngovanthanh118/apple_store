@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { Context } from "../../components/Contexts";
-import { isString, uniqBy } from "lodash";
+import { uniqBy } from "lodash";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function CartPage() {

@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Context } from '../../components/Contexts';
 import { setCookie } from '../../ultis';
+import UserSevice from '../../services/userSevice';
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,6 +14,9 @@ export default function LoginPage() {
     }, []);
     const handleLogin = (ev) => {
         ev.preventDefault();
+        // UserSevice.signIn({ email: email, password: password })
+        //     .then(res => console.log(res))
+        //     .catch(err => console.log(err))
         axios.post('/users/login', {
             email: email,
             password: password

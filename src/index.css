@@ -17,9 +17,6 @@ textarea {
     @apply w-full border my-1 py-2 px-3 rounded-2xl;
 }
 
-button {
-    @apply w-full bg-slate-900 text-white rounded-2xl p-2 mt-2;
-}
 
 table {
     @apply w-full mt-6;
@@ -162,9 +159,11 @@ footer {
         grid-template-columns: 1fr;
         padding: 0;
     }
-    div.mobile-category-container{
+
+    div.mobile-category-container {
         margin-top: 0;
     }
+
     div.mobile-cart-page {
         grid-template-columns: 1fr;
     }
@@ -235,15 +234,20 @@ footer {
     p.mobile-about {
         width: 90%;
     }
-
 }
 
 .swiper-button-prev:after,
 .swiper-button-next:after {
-    background-color: #ccc;
-    color: black;
+    background-color: #3e3e3f;
+    color: white;
     border-radius: 50%;
     padding: 8px 14px;
     font-weight: bold;
     font-size: 18px !important;
+    position: absolute;
+    top: 100%;
+}
+
+.swiper-slide.slide {
+    border-radius: 16px !important;
 }

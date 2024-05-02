@@ -1,29 +1,31 @@
 import Slide from "../../components/Slide";
-import NewProducts from "../../components/NewProducts";
-import SaleProducts from "../../components/SaleProducts";
+import ProductBox from "../../components/ProductBox";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import About from "../../components/About";
-import Service from "../../components/Service";
+import ProductService from '../../services/productService';
+import CategorySevice from '../../services/categorySevice';
+import CategoryBox from "../../components/CategoryBox";
 export default function HomePage() {
-    const [data, setData] = useState([]);
-    const loadHomePage = () => {
-        axios.get('/products/list')
-            .then(products => {
-                setData(products.data.data);
-            })
-            .catch(err => console.error(err))
-    }
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+
     useEffect(() => {
-        loadHomePage();
+        const fetctAllCategoriesAndProducts = async () => {
+            await ProductService.getProducts()
+                .then(res => setProducts(prev => prev = res.data))
+                .catch(error => { throw new Error(error) })
+            await CategorySevice.getAllCategories()
+                .then(res => setCategories(prev => prev = res.data))
+                .catch(error => { throw new Error(error) })
+        }
+        fetctAllCategoriesAndProducts();
     }, []);
     return (
         <div>
-            <Slide products={data.filter(proc => proc.status === "New")} />
-            <Service />
-            <About />
-            <NewProducts products={data.filter(proc => proc.status === "New")} />
-            <SaleProducts products={data.filter(proc => proc.discount > 0)} />
+            <Slide products={products.filter(proc => proc.status === "New")} />
+            <CategoryBox categories={categories} />
+            {categories.map(category => (
+                <ProductBox title={category.name} key={category._id} products={products.filter(product => product.categoryId === category._id)} />
+            ))}
         </div>
     )
 }

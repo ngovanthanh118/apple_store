@@ -1,47 +1,65 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../../components/Contexts";
+import productService from "../../services/productService";
 
 export default function ProductDetail() {
     const { _id } = useParams();
     const [data, setData] = useState([]);
     const { addProduct } = useContext(Context);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [comments, setComments] = useState([]);
     useEffect(() => {
+        const fetchProduct = async () => {
+            await productService.getProduct(_id)
+                .then(res => {
+                    setData(prev => prev = res.data);
+                    console.log(res.data);
+                })
+                .catch(err => console.log(err))
+        }
+        fetchProduct();
         window.scroll(0, 0);
-    }, [_id]);
-    useEffect(() => {
-        axios.get("/products/" + _id)
-            .then((res) => setData(res.data.data))
-            .catch(err => console.error(err));
-        axios.get("/comments/" + _id)
-            .then(res => setComments(res.data.data))
-            .catch(err => console.log(err));
     }, [_id])
-    const handleComment = (ev) => {
-        ev.preventDefault();
-        axios.post('/comments', {
-            title: title,
-            comment: content,
-            product_id: _id
-        })
-            .then(res => setComments(prev => [...prev, res.data.data]))
-            .catch(err => console.error(err))
-    }
     return (
         <div className="p-8">
             <div className="mobile-product-detail mt-26 flex gap-6">
                 <div className="bg-white rounded-xl">
-                    <img src={"https://apple-store-server.vercel.app/api/v1/images/" + data.image} alt="" />
+                    <img src={`${process.env.REACT_APP_API_URL}/images/${data?.image[0]}`} alt="anh" />
+                    <div className="flex gap-2">
+                        {data.image.map((img, index) => (
+                            <img key={index} src={`${process.env.REACT_APP_API_URL}/images/${img}`} alt="anh" width="80px" height="80px" />
+                        ))}
+                    </div>
                 </div>
                 <div className="p-4">
                     <h1 className="text-3xl font-bold">{data.name}</h1>
                     <p className="text-justify leading-7 mt-2">{data.description}</p>
+                    <div className="flex flex-col gap-2 my-1">
+                        <div className="flex">
+                            <p className="w-20">Color: </p>
+                            <div className="flex gap-2 items-center">
+                                {data.color?.map((clr, index) => (
+                                    <div key={index} style={{ backgroundColor: clr }} className="w-6 h-6 rounded-sm"></div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex">
+                            <p className="w-20">Status: </p>
+                            <p>{data.status}</p>
+                        </div>
+                        <div className="flex">
+                            <p className="w-20">Quantity: </p>
+                            <p>{data.quantity}</p>
+                        </div>
+                    </div>
                     <div className="flex gap-8 items-center py-1 mt-4">
-                        <h1 className="font-bold text-2xl text-black">${data.price}</h1>
+                        {data.discount > 0 ? (
+                            <div className="flex gap-2 items-center">
+                                <h1 className="font-bold text-2xl text-red-600 line-through">${data.price}</h1>
+                                <h1 className="font-bold text-2xl text-black">${data.discount}</h1>
+                            </div>
+                        ) :
+                            (<h1 className="font-bold text-2xl text-black">${data.price}</h1>)
+                        }
                         <Link className="rounded-2xl outline outline-green-900 outline-2 text-green-900 px-4 py-1 cursor-pointer flex gap-2 items-center btn-add"
                             onClick={() => addProduct({ ...data })}
                         >
@@ -54,30 +72,19 @@ export default function ProductDetail() {
                 </div>
             </div>
             <div>
-                <h1 className="text-3xl font-bold my-4">Reviews</h1>
-                <div className="mobile-product-review flex gap-4 justify-around">
-                    <div className="bg-white px-8 py-10 rounded-xl h-max mb-4">
-                        <h1 className="text-2xl font-bold my-2">Add a review</h1>
-                        <form onSubmit={handleComment}>
-                            <input type="text" placeholder="Title" value={title} onChange={(ev) => setTitle(ev.target.value)} />
-                            <input type="text" placeholder="What do you think?" value={content} onChange={(ev) => setContent(ev.target.value)} />
-                            <button className="bg-green-900 text-white rounded-xl mt-4">Submit your review</button>
-                        </form>
+                <h1 className="text-3xl font-bold my-4">Specifications</h1>
+                <div className="flex flex-col gap-5">
+                    <div className="flex">
+                        <p className="w-40">Size: </p>
+                        <p>{data.size}</p>
                     </div>
-                    <div className="mobile-product-review bg-white p-8 rounded-xl w-2/4">
-                        <h1 className="text-2xl font-bold my-2">All reviews</h1>
-                        {!comments.length && (
-                            <p className="p-4">No comment</p>
-                        )}
-                        {comments.length > 0 && comments.map(cmt => (
-                            <div key={cmt._id} className=" p-4 flex flex-col gap-4 border-t-2 border-gray-200 border-solid">
-                                <div className="flex justify-between item-center">
-                                    <h1 className="text-lg font-normal">{cmt.title}</h1>
-                                    <span className="text-base font-normal text-gray-400">{cmt.date}</span>
-                                </div>
-                                <p className="text-lg font-light text-slate-900">{cmt.comment}</p>
-                            </div>
-                        ))}
+                    <div className="flex">
+                        <p className="w-40">Capacity: </p>
+                        <div className="flex gap-2 items-center text-white">
+                            {data.capacity.map((cap, index) => (
+                                <p key={index} className="bg-[#1C1C1D] px-3 py-2">{cap}</p>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
