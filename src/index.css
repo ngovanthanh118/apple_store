@@ -64,7 +64,8 @@ footer {
 }
 
 .img-product {
-    height: 190px;
+    width: 250px;
+    height: 250px;
 }
 
 .box-product:hover {

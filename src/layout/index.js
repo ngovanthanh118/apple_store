@@ -5,7 +5,7 @@ export default function Layout() {
     return (
         <div className="bg-[#3E3E3F]">
             <Header />
-            <div className="pt-20 px-12">
+            <div className="pt-20 px-20">
                 <Outlet />
             </div>
             <Footer />
