@@ -32,7 +32,7 @@ export default function Header() {
         // }
     }, []);
     return (
-        <header className="mobile-header flex justify-between items-center bg-black fixed w-full z-10 top-0 px-4">
+        <header className="mobile-header flex justify-between items-center bg-black fixed w-full z-10 top-0 px-40">
             <Link className="text-white text-xl font-bold" to='/'>Apple Store</Link>
             <nav ref={navElement} className="mobile-nav-link flex items-center text-white font-normal text-sm">
                 {categories.map(category => (

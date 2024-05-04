@@ -21,7 +21,7 @@ export default function HomePage() {
     }, []);
     return (
         <div>
-            <Slide products={products.filter(proc => proc.status === "New")} />
+            {/* <Slide products={products.filter(proc => proc.status === "New")} /> */}
             <CategoryBox categories={categories} />
             {categories.map(category => (
                 <ProductBox title={category.name} key={category._id} products={products.filter(product => product.categoryId === category._id)} />

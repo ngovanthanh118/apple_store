@@ -41,7 +41,7 @@ export default function Slide({ products }) {
                                 </Link>
                             </div>
                         </div>
-                        <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image} width="600px" height="800px" alt="" />
+                        <img src={"https://apple-store-server.vercel.app/api/v1/images/" + product.image[0]} width="600px" height="800px" alt="" />
                     </div>
                 </SwiperSlide>
             ))}

@@ -1,20 +1,23 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Context } from "../../components/Contexts";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import productService from "../../services/productService";
 import { formatNumberWithDot } from "../../ultis";
 
 export default function ProductDetail() {
-    const { addProduct } = useContext(Context);
     const { _id } = useParams();
-    const [data, setData] = useState([]);
+    const navigate = useNavigate();
+    const [productDetail, setProductDetail] = useState({});
+    const [producSimalar, setProductSimalar] = useState([]);
     const [imageShow, setImageShow] = useState('');
+    const [colorActive, setColorActive] = useState('');
     useEffect(() => {
         const fetchProduct = async () => {
             await productService.getProduct(_id)
                 .then(res => {
-                    setData(prev => prev = res.data);
-                    setImageShow(prev => prev = res.data.image[0])
+                    setProductDetail(prev => prev = res.data.productDetail);
+                    setProductSimalar(prev => prev = res.data.productSimilar);
+                    setImageShow(prev => prev = res.data.productDetail.image[0]);
+                    setColorActive(prev => prev = res.data.productDetail.color[0]);
                 })
                 .catch(err => console.log(err))
         }
@@ -23,42 +26,68 @@ export default function ProductDetail() {
     }, [_id])
     return (
         <div className="px-20 py-8">
-            <div className="mobile-product-detail mt-26 grid grid-cols-2">
-                <div className="overflow-x-auto flex flex-col justify-between items-center">
-                    <img src={`${process.env.REACT_APP_API_URL}/images/${imageShow}`} alt="img_show" />
+            <div className="mobile-product-detail mt-26 grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-4 justify-between items-center">
+                    <img src={`${process.env.REACT_APP_API_URL}/images/${imageShow}`} alt="img_show" className="flex-1 object-cover" />
                     <div className="flex justify-around gap-3">
-                        {data.image && data.image?.map((img, index) => (
-                            <div className="bg-white rounded-lg flex items-center justify-center cursor-pointer">
-                                <img key={index + 1} src={`${process.env.REACT_APP_API_URL}/images/${img}`} alt="img_thumb" width="80px" height="80px" />
+                        {productDetail.image && productDetail.image?.map((img, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-lg p-2 flex items-center justify-center cursor-pointer"
+                                onClick={() => setImageShow(prev => prev = img)}
+                            >
+                                <img key={index + 1} src={`${process.env.REACT_APP_API_URL}/images/${img}`} alt="img_thumb" className="w-[80px] h-[80px]" />
                             </div>
                         ))}
+
                     </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <h1 className="text-3xl text-white font-bold">{data.name}</h1>
+                    <h1 className="text-3xl text-white font-bold">{productDetail.name}</h1>
                     <div className="flex gap-8 items-center py-1">
-                        {data?.discount > 0 ?
+                        {productDetail?.discount > 0 ?
                             <div className="flex gap-2 items-center">
-                                <h1 className="font-bold text-xl text-white">{formatNumberWithDot(data.discount)}đ</h1>
-                                <p className="font-normal text-base text-white line-through">{formatNumberWithDot(data.price)}đ</p>
-                                <span className="text-white text-base font-normal ">-{100 - Math.round(data.discount / data.price * 100)}%</span>
+                                <h1 className="font-bold text-xl text-white">{formatNumberWithDot(productDetail.discount)}đ</h1>
+                                <p className="font-normal text-base text-white line-through">{formatNumberWithDot(productDetail.price)}đ</p>
+                                <span className="text-white text-base font-normal ">-{100 - Math.round(productDetail.discount / productDetail.price * 100)}%</span>
                             </div> :
-                            <h1 className="font-bold text-2xl text-white">{formatNumberWithDot(data.price)}đ</h1>
+                            <h1 className="font-bold text-2xl text-white">{formatNumberWithDot(productDetail.price)}đ</h1>
                         }
                     </div>
                     <div className="flex flex-col gap-2 justify-center items-start">
                         <h1 className="text-white text-base font-medium">Dung lượng</h1>
-                        <div className="flex items-center gap-2">
-                            {data.capacity && data.capacity.map((item, index) => (
-                                <div key={index} className="p-2 text-white text-sm bg-[#1C1C1D] rounded-md">{item}</div>
+                        <div className="flex text-white items-center gap-2">
+                            {producSimalar && producSimalar.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={item._id === _id ?
+                                        "p-2 text-sm bg-[#1C1C1D] rounded-md cursor-pointer" :
+                                        "p-2 text-sm bg-[#2F3033] rounded-md cursor-pointer"
+                                    }
+                                    onClick={() => navigate(`/product/${item.url}/${item._id}`)}
+                                >
+                                    {item.capacity}
+                                </div>
                             ))}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 justify-center items-start">
-                        <h1 className="text-white text-base font-medium">Màu: Titan xanh</h1>
+                        <h1 className="text-white text-base font-medium">Màu</h1>
                         <div className="flex items-center gap-2">
-                            {data.color && data.color.map((item, index) => (
-                                <div key={index} style={{ backgroundColor: item }} className="p-4 border border-white border-solid rounded-full"></div>
+                            {productDetail.color && productDetail.color.map((item, index) => (
+                                <div
+                                    key={index}
+                                    style={{ backgroundColor: item }}
+                                    className={colorActive === item ?
+                                        "p-4 border border-white border-solid cursor-pointer rounded-full" :
+                                        "p-4 rounded-full cursor-pointer"
+                                    }
+                                    onClick={() => {
+                                        const findImageShowByColor = productDetail.image.find(img => img.includes(item.replace('#', '')))
+                                        setColorActive(prev => prev = item);
+                                        setImageShow(prev => prev = findImageShowByColor)
+                                    }}
+                                ></div>
                             ))}
                         </div>
                     </div>
@@ -88,27 +117,27 @@ export default function ProductDetail() {
                     <div className="flex flex-col py-2">
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] items-center border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">Độ phân giải:</h1>
-                            <p className="text-sm font-normal">{data.resolution} Pixels</p>
+                            <p className="text-sm font-normal">{productDetail.resolution} Pixels</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] items-center border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">Màn hình rộng:</h1>
-                            <p className="text-sm font-normal">{data.screenSize}" - Tần số quét {data.refreshRate} Hz</p>
+                            <p className="text-sm font-normal">{productDetail.screenSize}" - Tần số quét {productDetail.refreshRate} Hz</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] items-center border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">Chip xử lý (CPU):</h1>
-                            <p className="text-sm font-normal">{data.cpu}</p>
+                            <p className="text-sm font-normal">{productDetail.cpu}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] items-center border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">RAM:</h1>
-                            <p className="text-sm font-normal">{data.ram} GB</p>
+                            <p className="text-sm font-normal">{productDetail.ram} GB</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] items-center border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">Dung lượng pin:</h1>
-                            <p className="text-sm font-normal">{data.baterryLife} mAh</p>
+                            <p className="text-sm font-normal">{productDetail.baterryLife} mAh</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4 border-b-[1px] border-gray-300 py-4">
                             <h1 className="text-sm font-normal w-40">Hỗ trợ sạc tối đa:</h1>
-                            <p className="text-sm font-normal">{data.chargerCapacity} W</p>
+                            <p className="text-sm font-normal">{productDetail.chargerCapacity} W</p>
                         </div>
                     </div>
                 </div>
