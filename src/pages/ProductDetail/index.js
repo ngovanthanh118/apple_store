@@ -16,8 +16,8 @@ export default function ProductDetail() {
                 .then(res => {
                     setProductDetail(prev => prev = res.data.productDetail);
                     setProductSimalar(prev => prev = res.data.productSimilar);
-                    setImageShow(prev => prev = res.data.productDetail.image[0]);
-                    setColorActive(prev => prev = res.data.productDetail.color[0]);
+                    setImageShow(prev => prev = res.data.productDetail.images[0]);
+                    setColorActive(prev => prev = res.data.productDetail.colors[0]);
                 })
                 .catch(err => console.log(err))
         }
@@ -30,7 +30,7 @@ export default function ProductDetail() {
                 <div className="flex flex-col gap-4 justify-between items-center">
                     <img src={`${process.env.REACT_APP_API_URL}/images/${imageShow}`} alt="img_show" className="flex-1 object-cover" />
                     <div className="flex justify-around gap-3">
-                        {productDetail.image && productDetail.image?.map((img, index) => (
+                        {productDetail.images && productDetail.images?.map((img, index) => (
                             <div
                                 key={index}
                                 className="bg-white rounded-lg p-2 flex items-center justify-center cursor-pointer"
@@ -74,7 +74,7 @@ export default function ProductDetail() {
                     <div className="flex flex-col gap-2 justify-center items-start">
                         <h1 className="text-white text-base font-medium">Màu</h1>
                         <div className="flex items-center gap-2">
-                            {productDetail.color && productDetail.color.map((item, index) => (
+                            {productDetail.colors && productDetail.colors.map((item, index) => (
                                 <div
                                     key={index}
                                     style={{ backgroundColor: item }}
@@ -83,7 +83,7 @@ export default function ProductDetail() {
                                         "p-4 rounded-full cursor-pointer"
                                     }
                                     onClick={() => {
-                                        const findImageShowByColor = productDetail.image.find(img => img.includes(item.replace('#', '')))
+                                        const findImageShowByColor = productDetail.images.find(img => img.includes(item.replace('#', '')))
                                         setColorActive(prev => prev = item);
                                         setImageShow(prev => prev = findImageShowByColor)
                                     }}

@@ -67,7 +67,7 @@ export default function CategoryPage() {
                 {products && products.map(product => (
                     <ProductCard product={product} />
                 ))}
-                {errorMessage && <p>{errorMessage}</p>}
+                {errorMessage && <p className="text-white font-normal text-base">{errorMessage}</p>}
             </div>
         </div>
     );
