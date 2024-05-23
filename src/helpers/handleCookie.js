@@ -1,12 +1,3 @@
-export const setSessionItem = (key, value) => {
-    return sessionStorage.setItem(key, JSON.stringify(value));
-}
-export const getSessionItem = (key) => {
-    return JSON.parse(sessionStorage.getItem(key));
-}
-export const clearSessionItem = (key) => {
-    return sessionStorage.removeItem(key);
-}
 export const setCookie = (cname, cvalue, exdays) => {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -30,7 +21,4 @@ export const getCookie = (cname) => {
 }
 export const removeCookie = (cname) => {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
-export const formatNumberWithDot = (number) => {
-    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }

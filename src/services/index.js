@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "../ultis";
+import { getCookie } from "../helpers/handleCookie";
 class AxiosService {
     service;
     constructor() {

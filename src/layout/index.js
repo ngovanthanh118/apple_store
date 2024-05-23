@@ -1,13 +1,30 @@
-import { Outlet } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { Outlet, useLocation } from "react-router-dom";
+import Header from "../components/layouts/Header";
+import Footer from "../components/layouts/Footer";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { customerPrvSliceActions } from "../stores/slices/customerSlice";
+import { getCookie } from "../helpers/handleCookie";
+import { getSessionItem } from "../helpers/handleStorage";
+
 export default function Layout() {
+    const dispatch = useDispatch();
+    const location = useLocation();
+    useEffect(() => {
+        const fetchProfileCustomer = async () => {
+            await dispatch(customerPrvSliceActions.signIn());
+        }
+        if (getCookie('token') && !!!getSessionItem('customer')) {
+            fetchProfileCustomer();
+        }
+    }, [dispatch])
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location, dispatch])
     return (
-        <div className="bg-[#3E3E3F]">
+        <div>
             <Header />
-            <div className="pt-20 px-40">
-                <Outlet />
-            </div>
+            <Outlet />
             <Footer />
         </div>
     )

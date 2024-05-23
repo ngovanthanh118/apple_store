@@ -1,9 +1,9 @@
-import Slide from "../../components/Slide";
 import ProductBox from "../../components/ProductBox";
 import { useState, useEffect } from "react";
 import ProductService from '../../services/productService';
 import CategorySevice from '../../services/categorySevice';
 import CategoryBox from "../../components/CategoryBox";
+import { Box } from "@mui/material";
 export default function HomePage() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -20,12 +20,15 @@ export default function HomePage() {
         fetctAllCategoriesAndProducts();
     }, []);
     return (
-        <div>
+        <Box
+            backgroundColor="#3E3E3F"
+            padding="12px 64px"
+        >
             {/* <Slide products={products.filter(proc => proc.status === "New")} /> */}
             <CategoryBox categories={categories} />
             {categories.map(category => (
-                <ProductBox title={category.name} key={category._id} products={products.filter(product => product.categoryId === category._id)} />
+                <ProductBox title={category.name} key={category._id} products={products.filter(product => product.category_id === category._id)} />
             ))}
-        </div>
+        </Box>
     )
 }

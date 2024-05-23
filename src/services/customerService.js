@@ -1,5 +1,5 @@
 import AxiosService from ".";
-class UserService {
+class CustomerService {
     service;
     constructor() {
         this.service = AxiosService;
@@ -11,4 +11,4 @@ class UserService {
         return this.service.post('/users/register', payload);
     }
 }
-export default new UserService();
+export default new CustomerService();

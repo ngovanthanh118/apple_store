@@ -1,11 +1,37 @@
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom"
 
 export default function CategoryCard({ category }) {
     const navigate = useNavigate();
     return (
-        <div className="flex flex-col gap-2 justify-center items-center bg-[#323232] rounded-2xl cursor-pointer" onClick={() => navigate(`/category/${category.url}/${category._id}`)}>
-            <img className="object-cover" src={process.env.REACT_APP_API_URL + '/images/' + category.image} alt='Anh' />
-            <p className="text-white py-3 font-normal text-base">{category.name}</p>
-        </div>
+        <Card
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#323232",
+                borderRadius: "1rem",
+                cursor: "pointer",
+
+            }}
+            onClick={() => navigate(`/category/${category.url}/${category._id}`)}
+        >
+            <CardMedia
+                component="img"
+                image={process.env.REACT_APP_API_URL + '/images/' + category.image}
+                alt="Anh"
+            />
+            <CardContent>
+                <Typography
+                    color="white"
+                    fontSize="1rem"
+                    fontWeight="400"
+                    paddingY="0.75rem"
+                >
+                    {category.name}
+                </Typography>
+            </CardContent>
+        </Card>
     )
 }

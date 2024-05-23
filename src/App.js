@@ -1,36 +1,32 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CategoryPage from "./pages/CategoryPage";
-import CartPage from "./pages/CartPage";
 import Layout from "./layout";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AccountPage from "./pages/AccountPage";
-import ProductDetail from "./pages/ProductDetail";
-import CheckoutPage from "./pages/CheckoutPage";
-import SearchPage from "./pages/SearchPage";
+import CartPage from "./pages/CartPage";
+import MyOrderPage from "./pages/MyOrderPage";
+import ProfilePage from "./pages/ProfilePage";
+import OrderDetailPage from "./pages/OrderDetailPage";
 function App() {
   return (
-    <div className="bg-gray-200">
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />} >
           <Route index element={<HomePage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/my-order" element={<MyOrderPage />} />
+          <Route path="/my-order/:_id" element={<OrderDetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/category/:cate_url/:_id" element={<CategoryPage />} />
-          <Route path="/product/:proc_url/:_id" element={<ProductDetail />} />
-          {/* <Route path="/ipad/:_id" element={<IpadPage />} />
-          <Route path="/mac/:_id" element={<MacPage />} />
-          <Route path="/watch/:_id" element={<WatchPage />} />
-          <Route path="/accessory/:_id" element={<AccessoryPage />} />
-          <Route path="/sound/:_id" element={<SoundPage />} /> */}
+          <Route path="/product/:proc_url/:_id" element={<ProductDetailPage />} />
         </Route>
       </Routes>
-    </div>
+    </BrowserRouter>
+
   );
 }
 export default App;

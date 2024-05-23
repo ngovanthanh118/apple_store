@@ -1,52 +1,82 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import { Context } from '../../components/Contexts';
-import { setCookie } from '../../ultis';
-import UserSevice from '../../services/userSevice';
+import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography, Box, FormControl, TextField, Grid, CardMedia, FormLabel } from "@mui/material"
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { customerPrvSliceActions } from "../../stores/slices/customerSlice";
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { setAccounts } = useContext(Context)
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    useEffect(() => {
-        window.scroll(0, 0);
-    }, []);
-    const handleLogin = (ev) => {
-        ev.preventDefault();
-        // UserSevice.signIn({ email: email, password: password })
-        //     .then(res => console.log(res))
-        //     .catch(err => console.log(err))
-        axios.post('/users/login', {
-            email: email,
-            password: password
-        })
-            .then(res => {
-                setCookie("token", res.data.token);
-                setAccounts(res.data.user_id);
-                if (res.data.admin) {
-                    window.location = 'https://apple-store-dashboard-60fb324dec5b.herokuapp.com';
-                }
-                else {
-                    navigate('/');
-                }
-            })
-            .catch(err => console.error(err));
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ mode: "onChange" })
+    const onSubmit = async (data) => {
+        const res = await dispatch(customerPrvSliceActions.signIn(data));
+        if (res.payload) {
+            navigate('/');
+        }
     }
-
     return (
-        <div className="flex justify-center items-center p-8 min-h-screen">
-            <div className="flex flex-col items-center">
-                <h1 className="text-center text-4xl my-4 font-bold">Login</h1>
-                <form className="max-w-md" onSubmit={handleLogin}>
-                    <input type="email" placeholder="your@email.com" value={email} onChange={ev => setEmail(ev.target.value)} />
-                    <input type="password" placeholder="password" value={password} onChange={ev => setPassword(ev.target.value)} />
-                    <button>Login</button>
+        <Grid container spacing={4} px="120px" py="64px" backgroundColor="#F0F0F0">
+            <Grid item xs={5}>
+                <form>
+                    <Card>
+                        <CardHeader
+                            title="Đăng nhập"
+                        />
+                        <CardContent sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "12px"
+                        }}>
+                            <FormControl>
+                                <Typography component="label" htmlFor="email" fontSize="0.9rem" fontWeight="500">Email</Typography>
+                                <TextField
+                                    error={!!errors.email}
+                                    size="small"
+                                    type="email"
+                                    id="email"
+                                    {...register('email', {
+                                        required: "Email không được để trống"
+                                    })}
+                                    helperText={!!errors.email && errors.email.message}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <Typography component="label" htmlFor="password" fontSize="0.9rem" fontWeight="500">Mật khẩu</Typography>
+                                <TextField
+                                    error={!!errors.password}
+                                    margin="none"
+                                    type="password"
+                                    size="small"
+                                    id="password"
+                                    {...register('password', {
+                                        required: "Mật khẩu không được để trống"
+                                    })}
+                                    helperText={!!errors.password && errors.password.message}
+                                />
+                            </FormControl>
+                        </CardContent>
+                        <CardActions sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "12px"
+                        }}>
+                            <Button fullWidth variant="contained" onClick={handleSubmit(onSubmit)}>Đăng nhập</Button>
+                            <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+                                <Typography variant="span">Bạn chưa có tài khoản?</Typography>
+                                <Link to="/register" className="text-blue-600 underline align-middle">Đăng ký</Link>
+                            </Stack>
+                        </CardActions>
+                    </Card>
                 </form>
-                <span className="mt-4">Don't have an account yet?
-                    <Link className='ml-2 text-sky-500' to="/register">Register now</Link>
-                </span>
-            </div>
-        </div>
+            </Grid>
+            <Grid item xs={7}>
+                <Box>
+                    <img src={`${process.env.PUBLIC_URL}/images/login_background.jpg`} />
+                </Box>
+            </Grid>
+        </Grid>
     )
 }

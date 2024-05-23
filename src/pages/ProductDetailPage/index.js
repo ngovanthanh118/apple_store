@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import productService from "../../services/productService";
-import { formatNumberWithDot } from "../../ultis";
-
-export default function ProductDetail() {
+import { formatNumberWithDot } from "../../helpers/handleFormatNumber";
+import { useDispatch } from 'react-redux'
+import { addProductToCart } from "../../stores/slices/cartSlice";
+export default function ProductDetailPage() {
     const { _id } = useParams();
     const navigate = useNavigate();
     const [productDetail, setProductDetail] = useState({});
     const [producSimalar, setProductSimalar] = useState([]);
     const [imageShow, setImageShow] = useState('');
-    const [colorActive, setColorActive] = useState('');
+    const [colorActive, setColorActive] = useState('')
+    const dispatch = useDispatch();
     useEffect(() => {
         const fetchProduct = async () => {
             await productService.getProduct(_id)
@@ -25,7 +27,7 @@ export default function ProductDetail() {
         window.scroll(0, 0);
     }, [_id])
     return (
-        <div className="px-20 py-8">
+        <div className="px-20 py-8 bg-[#3E3E3F]">
             <div className="mobile-product-detail mt-26 grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-4 justify-between items-center">
                     <img src={`${process.env.REACT_APP_API_URL}/images/${imageShow}`} alt="img_show" className="flex-1 object-cover" />
@@ -104,7 +106,14 @@ export default function ProductDetail() {
                             </ul>
                         </div>
                     </div>
-                    <button className="p-4 bg-[#0071E3] text-white text-center text-xl font-bold rounded-xl w-full">Mua ngay</button>
+                    <div className="flex justify-between items-center gap-4">
+                        <button className="p-4 bg-[#0071E3] text-white text-center text-xl font-bold rounded-xl w-full"
+                            onClick={() => {
+                                dispatch(addProductToCart(productDetail));
+                            }}
+                        >Thêm vào giỏ hàng</button>
+                        <button className="p-4 bg-[#0071E3] text-white text-center text-xl font-bold rounded-xl w-full">Mua ngay</button>
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col gap-2 items-center mt-8 bg-white rounded-lg p-4">
