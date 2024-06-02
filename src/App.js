@@ -14,15 +14,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />} >
-          <Route index element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/my-order" element={<MyOrderPage />} />
-          <Route path="/my-order/:_id" element={<OrderDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/category/:cate_url/:_id" element={<CategoryPage />} />
-          <Route path="/product/:proc_url/:_id" element={<ProductDetailPage />} />
+          <Route path="/category/:cate_id" element={<CategoryPage />} />
+          <Route path="/product/:proc_id" element={<ProductDetailPage />} />
+          <Route path="/my-order/:_id" element={<OrderDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

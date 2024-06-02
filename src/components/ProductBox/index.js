@@ -7,15 +7,31 @@ import { Container, Box, Typography } from "@mui/material";
 import AppleIcon from '@mui/icons-material/Apple';
 export default function ProductBox({ title, products }) {
     return (
-        <Container>
+        <Container className="animate__animated animate__fadeInDown">
             {products?.length > 0 && (
                 <Swiper
                     modules={[Navigation]}
                     spaceBetween={20}
                     slidesPerView={4}
                     navigation
+                    breakpoints={{
+                        320: {
+                            slidesPerView: 1,
+                            spaceBetween: 10
+                        },
+                        // when window width is >= 480px
+                        480: {
+                            slidesPerView: 2,
+                            spaceBetween: 20
+                        },
+                        // when window width is >= 640px
+                        640: {
+                            slidesPerView: 4,
+                            spaceBetween: 30
+                        }
+                    }}
                 >
-                    {products.map(product => (
+                    {products.length > 0 && products.map(product => (
                         <SwiperSlide key={product._id} className="slide">
                             <ProductCard product={product} />
                         </SwiperSlide>

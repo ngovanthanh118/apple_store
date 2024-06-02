@@ -1,21 +1,69 @@
-import { Card, CardContent, CardMedia, IconButton, Stack, Typography, Box, CardActions, Button, TextField, FormControl, InputLabel } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectCustomer } from "../../stores/slices/customerSlice";
-import { EditOutlined, Email, FileUploadOutlined, FindReplaceOutlined } from "@mui/icons-material";
+import { Card, CardContent, Stack, Typography, Box, CardActions, Button, TextField, FormControl, InputLabel, Input, Container } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { customerPrvSliceActions, selectCustomer } from "../../stores/slices/customerSlice";
+import { FindReplaceOutlined } from "@mui/icons-material";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 export default function ProfilePage() {
     const customer = useSelector(selectCustomer);
+    const dispatch = useDispatch();
+    const [image, setImage] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [password, setPassword] = useState('');
+    const [imageUpdate, setImageUpdate] = useState('');
+    const [imageShowUrl, setImageShowUrl] = useState('');
+    useEffect(() => {
+        setName(prev => prev = customer.name);
+        setPhone(prev => prev = customer.phone);
+        setAddress(prev => prev = customer.address);
+        if (!!customer.image) {
+            setImage(prev => prev = customer.image);
+        }
+    }, [customer])
+    const handleChangeFile = (ev) => {
+        const file = ev.target.files[0];
+        const url = URL.createObjectURL(file);
+        setImageUpdate(prev => prev = file);
+        setImageShowUrl(prev => prev = url)
+    }
+    const handleUpdateProfile = async () => {
+        const res = await dispatch(customerPrvSliceActions.updateProfile({
+            id: customer._id,
+            name: name,
+            phone: phone,
+            address: address,
+            image: imageUpdate,
+            password: password,
+        }))
+        if (!res.payload.error) {
+            toast.success("Cập nhật tài khoản thành công!");
+            return;
+        }
+        toast.error("Cập nhật tài khoản thất bại!");
+    }
     return (
-        <Stack direction="row" justifyContent="center" alignItems="center" sx={{
-            minHeight: "100vh",
-            backgroundColor: "#F0F0F0",
-        }}>
-            <Box
-                display="flex"
-                flexDirection="column"
-                minWidth="500px"
-                padding="12px"
-                gap="16px"
-                backgroundColor="white"
+        <Box display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            backgroundColor="#F0F0F0"
+            padding="12px"
+        >
+            <Container
+
+                className="animate__animated animate__fadeInTopRight"
+                sx={{
+                    padding: "16px",
+                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                    maxWidth: {
+                        sm: "600px !important"
+                    }
+                }}
             >
                 <Card sx={{
                     display: "flex",
@@ -23,37 +71,19 @@ export default function ProfilePage() {
                     gap: "32px",
                     padding: "12px"
                 }}>
-                    <CardMedia
-                        component="img"
-                        image={!!!customer.image ?
-                            customer.image
-                            : `${process.env.PUBLIC_URL}/images/empty_image.png`
-                        }
-                        sx={{
-                            maxWidth: "80px"
-                        }}
-                    />
+
                     <CardContent sx={{ padding: "6px" }}>
-                        <Stack direction="column" spacing={1}>
-                            <Typography variant="h1" fontSize="1rem" fontWeight="500">{customer.name}</Typography>
-                            <Typography fontSize=".9rem" fontWeight="400">{customer.email}</Typography>
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                <IconButton sx={{
-                                    padding: "0px"
-                                }}>
-                                    <Email />
-                                </IconButton>
-                                <FormControl>
-                                    <InputLabel>
-                                        <IconButton sx={{
-                                            padding: "0px"
-                                        }}>
-                                            <FileUploadOutlined />
-                                        </IconButton>
-                                    </InputLabel>
-                                </FormControl>
+                        <Box display="flex" gap="18px" alignItems="flex-start">
+                            <InputLabel htmlFor="image" sx={{ cursor: "pointer" }}>
+                                {!!!imageShowUrl && <img src={`${process.env.REACT_APP_API_URL}/images/${image}`} alt="Ảnh" width="100px" height="100px" />}
+                                {!!imageShowUrl && <img src={imageShowUrl} alt="Ảnh" width="100px" height="100px" />}
+                            </InputLabel>
+                            <Input type="file" id="image" sx={{ display: "none" }} onChange={handleChangeFile} />
+                            <Stack direction="column" spacing={1}>
+                                <Typography variant="h1" fontSize="1rem" fontWeight="500">{customer.name}</Typography>
+                                <Typography fontSize=".9rem" fontWeight="400">{customer.email}</Typography>
                             </Stack>
-                        </Stack>
+                        </Box>
                     </CardContent>
                 </Card>
                 <Card sx={{
@@ -66,18 +96,11 @@ export default function ProfilePage() {
                     <CardContent sx={{ padding: "6px" }}>
                         <Stack direction="column" spacing={1}>
                             <Typography variant="h1" fontSize="1rem" fontWeight="500">Tên</Typography>
-                            <Typography fontSize="0.9rem">{customer.name}</Typography>
+                            <Input onChange={(ev) => setName(ev.target.value)} size="small" value={name} sx={{ fontSize: "0.9rem" }} />
+                            {/* <Typography fontSize="0.9rem">{customer.name}</Typography> */}
                         </Stack>
                     </CardContent>
-                    <CardActions>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            startIcon={<EditOutlined />}
-                        >
-                            Chỉnh sửa
-                        </Button>
-                    </CardActions>
+
                 </Card>
                 <Card sx={{
                     display: "flex",
@@ -89,18 +112,10 @@ export default function ProfilePage() {
                     <CardContent sx={{ padding: "6px" }}>
                         <Stack direction="column" spacing={1}>
                             <Typography variant="h1" fontSize="1rem" fontWeight="500">Số điện thoại</Typography>
-                            <Typography fontSize="0.9rem">{customer.phone}</Typography>
+                            <Input onChange={(ev) => setPhone(ev.target.value)} size="small" value={phone} sx={{ fontSize: "0.9rem" }} />
                         </Stack>
                     </CardContent>
-                    <CardActions>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            startIcon={<EditOutlined />}
-                        >
-                            Chỉnh sửa
-                        </Button>
-                    </CardActions>
+
                 </Card>
                 <Card sx={{
                     display: "flex",
@@ -112,18 +127,10 @@ export default function ProfilePage() {
                     <CardContent sx={{ padding: "6px" }}>
                         <Stack direction="column" spacing={1}>
                             <Typography variant="h1" fontSize="1rem" fontWeight="500">Địa chỉ</Typography>
-                            <Typography fontSize="0.9rem">{customer.address}</Typography>
+                            <Input onChange={(ev) => setAddress(ev.target.value)} size="small" value={address} sx={{ fontSize: "0.9rem" }} />
                         </Stack>
                     </CardContent>
-                    <CardActions>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            startIcon={<EditOutlined />}
-                        >
-                            Chỉnh sửa
-                        </Button>
-                    </CardActions>
+
                 </Card>
                 <Card sx={{
                     display: "flex",
@@ -138,6 +145,8 @@ export default function ProfilePage() {
                             <TextField
                                 size="small"
                                 type="password"
+                                value={password}
+                                onChange={(ev) => setPassword(ev.target.value)}
                             />
                         </Stack>
                     </CardContent>
@@ -146,12 +155,13 @@ export default function ProfilePage() {
                             variant="contained"
                             size="small"
                             startIcon={<FindReplaceOutlined />}
+                            onClick={handleUpdateProfile}
                         >
                             Cập nhật
                         </Button>
                     </CardActions>
                 </Card>
-            </Box>
-        </Stack>
+            </Container>
+        </Box>
     )
 }

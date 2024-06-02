@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getCookie } from "../helpers/handleCookie";
 class AxiosService {
     service;
     constructor() {
@@ -12,38 +11,33 @@ class AxiosService {
                 'x-custom-lang': 'en',
             },
         });
-        service.interceptors.request.use(this.handleInterceptRequest);
         service.interceptors.response.use(this.handleSuccess, this.handlError);
         this.service = service;
     }
-    handleInterceptRequest(config) {
-        const token = getCookie('token');
-        if (token) config.headers.token = token;
-        return config;
-    }
+
     handleSuccess(response) {
         return response.data;
     }
     handlError(error) {
         throw error
     }
-    async get(endpoint) {
-        return this.service.get(endpoint);
+    async get(endpoint, options) {
+        return this.service.get(endpoint, options);
     }
 
-    async post(endpoint, payload) {
-        return this.service.post(endpoint, payload);
+    async post(endpoint, payload, options) {
+        return this.service.post(endpoint, payload, options);
     }
-    async put(endpoint, payload) {
-        return this.service.put(endpoint, payload);
-    }
-
-    async patch(endpoint, payload) {
-        return this.service.patch(endpoint, payload);
+    async put(endpoint, payload, options) {
+        return this.service.put(endpoint, payload, options);
     }
 
-    async delete(endpoint) {
-        return this.service.delete(endpoint);
+    async patch(endpoint, payload, options) {
+        return this.service.patch(endpoint, payload, options);
+    }
+
+    async delete(endpoint, options) {
+        return this.service.delete(endpoint, options);
     }
 }
 export default new AxiosService();

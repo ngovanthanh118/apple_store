@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import customerService from '../../services/customerService'
 import { removeCookie, setCookie } from '../../helpers/handleCookie';
+import { clearSessionItem } from '../../helpers/handleStorage';
 
 const initialState = {
     value: {},
@@ -24,11 +25,21 @@ const siginUp = createAsyncThunk(
         return true;
     }
 )
+const updateProfile = createAsyncThunk(
+    'customer/updateProfle',
+    async (payload, { dispatch }) => {
+        const { id, ...rest } = payload;
+        const res = await customerService.updateProfile(id, rest);
+        dispatch(saveProfileCustomer(res.data));
+        return res;
+    }
+)
 const logout = createAsyncThunk(
     'customer/logout',
     async (_, { dispatch }) => {
         dispatch(removeProfileCustome());
-        removeCookie('token')
+        removeCookie('token');
+        clearSessionItem('customer');
         return true;
     }
 )
@@ -44,7 +55,7 @@ export const customerSlice = createSlice({
         }
     },
 })
-export const customerPrvSliceActions = { signIn, siginUp, logout };
+export const customerPrvSliceActions = { signIn, siginUp, logout, updateProfile };
 export const { saveProfileCustomer, removeProfileCustome } = customerSlice.actions
 export default customerSlice.reducer;
 export const selectCustomer = (state) => state.customer.value;

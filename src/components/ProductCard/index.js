@@ -16,7 +16,8 @@ export default function ProductCard({ product }) {
                 paddingBottom: "4rem",
                 cursor: "pointer",
             }}
-            onClick={() => navigate(`/product/${product.url}/${product._id}`)}
+            className="animate__animated animate__fadeInDown"
+            onClick={() => navigate(`/product/${product._id}`)}
         >
             <CardMedia
                 component="img"
@@ -31,20 +32,36 @@ export default function ProductCard({ product }) {
                     fontWeight="500">
                     {product.name}
                 </Typography>
-                <Stack
-                    direction="row"
-                    sx={{
-                        backgroundColor: "black",
-                        padding: "0.5rem",
-                        border: "1px solid #535353",
-                        borderRadius: "0.75rem",
-                        color: "white",
-                        fontSize: "1rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    {product.capacity}
-                </Stack>
+                {!!product.version ?
+                    <Stack
+                        direction="row"
+                        sx={{
+                            backgroundColor: "black",
+                            padding: "0.5rem",
+                            border: "1px solid #535353",
+                            borderRadius: "0.75rem",
+                            color: "white",
+                            fontSize: "1rem",
+                            fontWeight: "500",
+                        }}
+                    >
+                        {product.version}
+                    </Stack> :
+                    <Stack
+                        direction="row"
+                        sx={{
+                            backgroundColor: "black",
+                            padding: "0.5rem",
+                            border: "1px solid #535353",
+                            borderRadius: "0.75rem",
+                            color: "white",
+                            fontSize: "1rem",
+                            fontWeight: "500",
+                        }}
+                    >
+                        {product.capacity}
+                    </Stack>
+                }
                 <Stack direction="row">
                     {product?.discount > 0 ?
                         <Stack

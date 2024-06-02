@@ -15,7 +15,7 @@ export default function CategoryCard({ category }) {
                 cursor: "pointer",
 
             }}
-            onClick={() => navigate(`/category/${category.url}/${category._id}`)}
+            onClick={() => navigate(`/category/${category._id}`)}
         >
             <CardMedia
                 component="img"

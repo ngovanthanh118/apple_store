@@ -15,37 +15,62 @@ import {
     Checkbox,
     RadioGroup,
     Radio,
+    Container,
 } from "@mui/material";
+import { loadStripe } from '@stripe/stripe-js';
 import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import { formatNumberWithDot } from "../../helpers/handleFormatNumber";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { orderPrvSliceActions } from "../../stores/slices/orderSlice";
 import { selectCustomer } from "../../stores/slices/customerSlice";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
+import isEmptyObject from "../../helpers/handleEmptyObject";
 import { selectCart } from "../../stores/slices/cartSlice";
 import { clearCart, removeProductInCart, decreaseQuantityProductInCart, increasQuantityProductInCart } from "../../stores/slices/cartSlice";
+import addressService from "../../services/addressService";
+import { checkoutPrvSliceActions } from "../../stores/slices/checkoutSlice";
 export default function CartPage() {
     const cart = useSelector(selectCart);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const customer = useSelector(selectCustomer);
+    const [provinceList, setProvinceList] = useState([]);
+    const [districtList, setDistrictList] = useState([]);
+    const [wardList, setWardList] = useState([]);
     const {
         register,
         handleSubmit,
         reset,
         setValue,
+        getValues,
         formState: { errors },
     } = useForm({ mode: "onChange" });
+    useEffect(() => {
+        const fetchProvinces = async () => {
+            await addressService.getProvinces()
+                .then(res => {
+                    setProvinceList(prev => prev = res.data.results);
+                })
+                .catch(err => console.log(err))
+        }
+        fetchProvinces();
+        setValue('payment_method', 'Thanh toán khi nhận hàng');
+    }, [])
     useEffect(() => {
         const productsPayload = cart.map((product) => {
             return {
                 product_id: product._id,
+                category_id: product.category_id,
+                name: product.name,
+                color: product.colors[0],
                 quantity: product.quantity_order,
+                price: product.price,
+                image: product.images[0],
             };
         });
         setValue("products", productsPayload);
@@ -54,14 +79,24 @@ export default function CartPage() {
         return cart.reduce((accumulator, currentValue) => accumulator + currentValue.quantity_order * currentValue.price, 0)
     }, [cart])
     const onSubmit = async (data) => {
+        if (isEmptyObject(customer)) {
+            navigate('/login');
+            return;
+        }
         const { province, district, ward, ...rest } = data;
         const res = await dispatch(
             orderPrvSliceActions.createOrder({
                 ...rest,
                 user_id: customer._id,
-                address: `${rest.address}, ${ward}, ${district}, ${province}`,
+                address: `${rest.address}, ${province}, ${district}, ${ward}`,
             })
         );
+        if (data.payment_method === 'Thanh toán trực tuyến') {
+            dispatch(clearCart());
+            reset();
+            await handleCheckoutOnline(data.products);
+            return;
+        }
         if (!res.payload.error) {
             toast.success("Đặt hàng thành công!");
             dispatch(clearCart());
@@ -69,21 +104,63 @@ export default function CartPage() {
             navigate("/my-order/" + res.payload.data._id);
         }
     };
+    const handleChangeColor = (color, id) => {
+        const procPayload = getValues('products');
+        const newPayload = procPayload.map(product => {
+            if (product.product_id === id) {
+                return { ...product, color: color }
+            }
+            return product;
+        })
+        setValue('products', newPayload)
+    }
+    const handleChangeProvince = async (ev) => {
+        const provinceName = provinceList.find(province => province.province_id === ev.target.value).province_name;
+        setValue('province', provinceName)
+        await addressService.getDistricts(ev.target.value)
+            .then(res => setDistrictList(prev => prev = res.data.results))
+            .catch(err => console.log(err))
+    }
+    const handleChangeDistrict = async (ev) => {
+        const districtName = districtList.find(district => district.district_id === ev.target.value).district_name;
+        setValue('district', districtName)
+        await addressService.getWards(ev.target.value)
+            .then(res => setWardList(prev => prev = res.data.results))
+            .catch(err => console.log(err))
+    }
+    const handleChangeWard = (ev) => {
+        const wardName = wardList.find(ward => ward.ward_id === ev.target.value).ward_name;
+        setValue('ward', wardName)
+    }
+    const handleCheckoutOnline = async (products) => {
+        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+        const res = await dispatch(checkoutPrvSliceActions.createCheckout({ products: products }));
+        stripe.redirectToCheckout({
+            sessionId: res.payload.id
+        })
+    }
     return (
         <Box
             backgroundColor="#F0F0F0"
-            padding="18px 70px"
+            padding="18px 0"
             minHeight="100vh"
             display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="start"
+            alignItems="flex-start"
+            justifyContent="center"
             gap="16px"
-        >
 
-            <Stack direction="column" spacing={1} sx={{
-                maxWidth: "650px"
-            }}>
+        >
+            <Container
+                maxWidth="md"
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    maxWidth: "650px"
+                }}
+                className="animate__animated animate__fadeInTopRight"
+            >
+
                 <Box
                     backgroundColor="white"
                     paddingX="24px"
@@ -92,10 +169,12 @@ export default function CartPage() {
                     display="flex"
                     flexDirection="column"
                     gap="18px"
+
                 >
                     {cart.length > 0 &&
                         cart.map((product, index) => (
                             <Stack
+                                key={index}
                                 direction="row"
                                 spacing={2}
                                 sx={
@@ -111,7 +190,7 @@ export default function CartPage() {
                                     alignItems="center"
                                 >
                                     <img
-                                        src={`${process.env.REACT_APP_API_URL}/images/${product.image_show}`}
+                                        src={`${process.env.REACT_APP_API_URL}/images/${product.images[0]}`}
                                         alt="Ảnh"
                                         className="w-16 h-16"
                                     />
@@ -135,18 +214,24 @@ export default function CartPage() {
                                     <Typography variant="h1" fontSize="1rem" fontWeight="300">
                                         {`${product.name} ${product.capacity}`}
                                     </Typography>
-                                    <Select
+                                    <TextField
+                                        select
+                                        defaultValue={product.colors[0]}
                                         size="small"
                                         sx={{
-                                            width: "100px",
-                                            padding: "0",
-                                            borderRadius: "12px",
+                                            width: "50%",
                                         }}
+                                        onChange={(ev) => handleChangeColor(ev.target.value, product._id)}
                                     >
-                                        {product.colors.map((color) => (
-                                            <MenuItem>{color}</MenuItem>
+                                        {product.colors.length > 0 && product.colors.map((color) => (
+                                            <MenuItem
+                                                key={color}
+                                                value={color}
+                                                sx={{ backgroundColor: color, padding: "12px 0" }}
+
+                                            >{color}</MenuItem>
                                         ))}
-                                    </Select>
+                                    </TextField>
                                 </Box>
                                 <Box
                                     display="flex"
@@ -307,7 +392,7 @@ export default function CartPage() {
                         container
                         spacing={2}
                         sx={{
-                            backgroundColor: "#F5F5F7",
+                            // backgroundColor: "#F5F5F7",
                             padding: "12px 6px",
                             borderRadius: "12px",
                         }}
@@ -320,16 +405,22 @@ export default function CartPage() {
                                 defaultValue="default"
                                 sx={{
                                     backgroundColor: "white",
+                                    maxHeight: "500px"
                                 }}
-                                {...register("province", {
-                                    required: "Vui lòng chọn tỉnh thành phố",
-                                })}
+
+                                // {...register("province", {
+                                //     required: "Vui lòng chọn tỉnh thành phố",
+                                // })}
+                                onChange={handleChangeProvince}
                             >
                                 <MenuItem sx={{ display: "none" }} value="default">
                                     Chọn Tỉnh / Thành phố
                                 </MenuItem>
-                                <MenuItem value="Hà Nội">Hà Nội</MenuItem>
-                                <MenuItem value="Hồ Chí Minh">Hồ Chí Minh</MenuItem>
+                                {provinceList?.length > 0 && provinceList.map(province => (
+                                    <MenuItem key={province.province_id} value={province.province_id}>{province.province_name}</MenuItem>
+                                ))}
+
+
                             </TextField>
                             {!!errors.province && (
                                 <Typography
@@ -350,16 +441,17 @@ export default function CartPage() {
                                 defaultValue="default"
                                 sx={{
                                     backgroundColor: "white",
+                                    maxHeight: "500px"
                                 }}
-                                {...register("district", {
-                                    required: "Vui lòng chọn quận huyện",
-                                })}
+
+                                onChange={handleChangeDistrict}
                             >
                                 <MenuItem sx={{ display: "none" }} value="default">
                                     Chọn Quận / Huyện
                                 </MenuItem>
-                                <MenuItem value="Bắc Từ Liêm">Bắc Từ Liêm</MenuItem>
-                                <MenuItem value="Bình Thạnh">Bình Thạnh</MenuItem>
+                                {districtList.length > 0 && districtList.map(district => (
+                                    <MenuItem key={district.district_id} value={district.district_id}>{district.district_name}</MenuItem>
+                                ))}
                             </TextField>
                             {!!errors.district && (
                                 <Typography
@@ -380,16 +472,17 @@ export default function CartPage() {
                                 defaultValue="default"
                                 sx={{
                                     backgroundColor: "white",
+                                    maxHeight: "500px"
                                 }}
-                                {...register("ward", {
-                                    required: "Vui lòng chọn phường xã",
-                                })}
+
+                                onChange={handleChangeWard}
                             >
                                 <MenuItem sx={{ display: "none" }} value="default">
                                     Chọn Phường / Xã
                                 </MenuItem>
-                                <MenuItem value="Minh Khai">Minh Khai</MenuItem>
-                                <MenuItem value="Phường 11">Phường 11</MenuItem>
+                                {wardList.length > 0 && wardList.map(ward => (
+                                    <MenuItem key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</MenuItem>
+                                ))}
                             </TextField>
                             {!!errors.ward && (
                                 <Typography
@@ -490,12 +583,12 @@ export default function CartPage() {
                             {formatNumberWithDot(totalPrice)}đ
                         </Typography>
                     </Stack>
-                    <FormGroup>
+                    {/* <FormGroup>
                         <FormControlLabel
                             control={<Checkbox defaultChecked />}
                             label="Tôi đồng ý với Chính sách xử lý dữ liệu cá nhân của cửa hàng"
                         />
-                    </FormGroup>
+                    </FormGroup> */}
                     <Button
                         fullWidth
                         variant="contained"
@@ -505,8 +598,9 @@ export default function CartPage() {
                         Đặt hàng
                     </Button>
                 </Box>
-            </Stack>
 
+
+            </Container>
         </Box >
     )
 }

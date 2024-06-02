@@ -1,30 +1,30 @@
 import ProductBox from "../../components/ProductBox";
 import { useState, useEffect } from "react";
-import ProductService from '../../services/productService';
-import CategorySevice from '../../services/categorySevice';
 import CategoryBox from "../../components/CategoryBox";
 import { Box } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { categoryPrvSliceActions } from "../../stores/slices/categorySlice";
+import { productPrvSliceActions } from "../../stores/slices/productSlice";
+import Slide from "../../components/Slide";
 export default function HomePage() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-
+    const dispatch = useDispatch();
     useEffect(() => {
         const fetctAllCategoriesAndProducts = async () => {
-            await ProductService.getProducts()
-                .then(res => setProducts(prev => prev = res.data))
-                .catch(error => { throw new Error(error) })
-            await CategorySevice.getAllCategories()
-                .then(res => setCategories(prev => prev = res.data))
-                .catch(error => { throw new Error(error) })
+            const productsResponse = await dispatch(productPrvSliceActions.getProductList());
+            const categoriesResponse = await dispatch(categoryPrvSliceActions.getCategoryList());
+            setProducts(prev => prev = productsResponse.payload.data)
+            setCategories(prev => prev = categoriesResponse.payload.data);
         }
         fetctAllCategoriesAndProducts();
     }, []);
     return (
         <Box
             backgroundColor="#3E3E3F"
-            padding="12px 64px"
+            minHeight="100vh"
         >
-            {/* <Slide products={products.filter(proc => proc.status === "New")} /> */}
+            <Slide />
             <CategoryBox categories={categories} />
             {categories.map(category => (
                 <ProductBox title={category.name} key={category._id} products={products.filter(product => product.category_id === category._id)} />

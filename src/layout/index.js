@@ -6,15 +6,17 @@ import { useDispatch } from "react-redux";
 import { customerPrvSliceActions } from "../stores/slices/customerSlice";
 import { getCookie } from "../helpers/handleCookie";
 import { getSessionItem } from "../helpers/handleStorage";
+import isEmptyObject from "../helpers/handleEmptyObject";
 
 export default function Layout() {
-    const dispatch = useDispatch();
     const location = useLocation();
+
+    const dispatch = useDispatch();
     useEffect(() => {
         const fetchProfileCustomer = async () => {
             await dispatch(customerPrvSliceActions.signIn());
         }
-        if (getCookie('token') && !!!getSessionItem('customer')) {
+        if (getCookie('token') && isEmptyObject(getSessionItem('customer'))) {
             fetchProfileCustomer();
         }
     }, [dispatch])
@@ -22,7 +24,7 @@ export default function Layout() {
         window.scrollTo(0, 0)
     }, [location, dispatch])
     return (
-        <div>
+        <div >
             <Header />
             <Outlet />
             <Footer />
