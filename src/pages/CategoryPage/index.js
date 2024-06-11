@@ -26,11 +26,11 @@ export default function CategoryPage() {
     const handleSortProduct = (ev) => {
         switch (ev.target.value) {
             case 'ascending':
-                const ascProducts = [...productStore].sort((a, b) => b.price - a.price);
+                const ascProducts = [...productStore].sort((a, b) => a.discount - b.discount);
                 setProducts(prev => prev = ascProducts)
                 break;
             case 'descending':
-                const descProducts = [...productStore].sort((a, b) => a.price - b.price);
+                const descProducts = [...productStore].sort((a, b) => b.discount - a.discount);
                 setProducts(prev => prev = descProducts)
                 break;
             default:

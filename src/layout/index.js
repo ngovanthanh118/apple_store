@@ -24,10 +24,10 @@ export default function Layout() {
         window.scrollTo(0, 0)
     }, [location, dispatch])
     return (
-        <div >
+        <>
             <Header />
             <Outlet />
             <Footer />
-        </div>
+        </>
     )
 }

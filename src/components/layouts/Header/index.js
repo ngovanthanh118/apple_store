@@ -87,6 +87,10 @@ export default function Header() {
                 zIndex: "10",
                 top: "0",
                 backgroundColor: "black",
+                paddingX: {
+                    sm: "18px !important",
+                    md: "128px !important"
+                }
             }}
             component="header"
         >
@@ -152,7 +156,7 @@ export default function Header() {
                         color: "white",
                         backgroundColor: "#2f3033",
                         padding: "8px",
-                        borderRadius: "50%"
+                        borderRadius: "50%",
                     }}
                 >
                     <Search />

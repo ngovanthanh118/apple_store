@@ -8,6 +8,7 @@ export const clearSessionItem = (key) => {
     return sessionStorage.removeItem(key);
 }
 export const setLocalStorageItem = (key, value) => {
+
     return localStorage.setItem(key, JSON.stringify(value));
 }
 export const getLocalStorageItem = (key) => {

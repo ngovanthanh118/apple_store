@@ -14,7 +14,12 @@ export default function LoginPage() {
     } = useForm({ mode: "onChange" })
     const onSubmit = async (data) => {
         const res = await dispatch(customerPrvSliceActions.signIn(data));
-        if (res.payload) {
+        console.log(res.payload);
+        if (res.payload.admin) {
+            window.location = process.env.REACT_APP_DASHBOARD_URL;
+            return;
+        }
+        if (!res.payload.error) {
             navigate('/');
             return;
         }

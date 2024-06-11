@@ -36,6 +36,7 @@ import addressService from "../../services/addressService";
 import { checkoutPrvSliceActions } from "../../stores/slices/checkoutSlice";
 export default function CartPage() {
     const cart = useSelector(selectCart);
+    const [colorSelected, setColorSelected] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const customer = useSelector(selectCustomer);
@@ -67,18 +68,19 @@ export default function CartPage() {
                 product_id: product._id,
                 category_id: product.category_id,
                 name: product.name,
-                color: product.colors[0],
+                color: product.colors[0].label,
                 quantity: product.quantity_order,
-                price: product.price,
+                price: product.discount,
                 image: product.images[0],
             };
         });
         setValue("products", productsPayload);
     }, [cart]);
     const totalPrice = useMemo(() => {
-        return cart.reduce((accumulator, currentValue) => accumulator + currentValue.quantity_order * currentValue.price, 0)
+        return cart.reduce((accumulator, currentValue) => accumulator + currentValue.quantity_order * currentValue.discount, 0)
     }, [cart])
     const onSubmit = async (data) => {
+
         if (isEmptyObject(customer)) {
             navigate('/login');
             return;
@@ -88,7 +90,7 @@ export default function CartPage() {
             orderPrvSliceActions.createOrder({
                 ...rest,
                 user_id: customer._id,
-                address: `${rest.address}, ${province}, ${district}, ${ward}`,
+                address: `${rest.address}, ${ward}, ${district}, ${province}`,
             })
         );
         if (data.payment_method === 'Thanh toán trực tuyến') {
@@ -216,20 +218,20 @@ export default function CartPage() {
                                     </Typography>
                                     <TextField
                                         select
-                                        defaultValue={product.colors[0]}
+                                        defaultValue={product.colors[0].label}
                                         size="small"
                                         sx={{
-                                            width: "50%",
+                                            width: "30%",
                                         }}
                                         onChange={(ev) => handleChangeColor(ev.target.value, product._id)}
                                     >
                                         {product.colors.length > 0 && product.colors.map((color) => (
                                             <MenuItem
-                                                key={color}
-                                                value={color}
-                                                sx={{ backgroundColor: color, padding: "12px 0" }}
+                                                key={color.label}
+                                                value={color.label}
+                                                sx={{ padding: "12px" }}
 
-                                            >{color}</MenuItem>
+                                            >{color.label}</MenuItem>
                                         ))}
                                     </TextField>
                                 </Box>

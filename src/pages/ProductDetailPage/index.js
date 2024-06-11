@@ -48,7 +48,7 @@ export default function ProductDetailPage() {
                     setProductDetail(prev => prev = res.data.productDetail);
                     setProductSimalar(prev => prev = res.data.productSimilar);
                     setImageShow(prev => prev = res.data.productDetail.images[0]);
-                    setColorActive(prev => prev = res.data.productDetail.colors[0]);
+                    setColorActive(prev => prev = res.data.productDetail.colors[0].label);
                 })
                 .catch(err => console.log(err))
         }
@@ -139,17 +139,17 @@ export default function ProductDetailPage() {
                         }
 
                         <Box display="flex" flexDirection="column" gap="8px">
-                            <Typography variant="h1" color="white" fontSize="1rem" fontWeight="500">Màu</Typography>
+                            <Typography variant="h1" color="white" fontSize="1rem" fontWeight="500">Màu: {colorActive}</Typography>
                             <Box display="flex" alignItems="center" gap="8px">
                                 {productDetail.colors && productDetail.colors.map((item, index) => (
                                     <Box
                                         key={index}
-                                        style={{ backgroundColor: item }}
-                                        className={colorActive === item ?
+                                        style={{ backgroundColor: item.color }}
+                                        className={colorActive === item.label ?
                                             "p-4 border border-white border-solid cursor-pointer rounded-full" :
                                             "p-4 rounded-full cursor-pointer"
                                         }
-                                        onClick={() => { setColorActive(prev => prev = item) }}
+                                        onClick={() => { setColorActive(prev => prev = item.label) }}
                                     ></Box>
                                 ))}
                             </Box>
@@ -157,17 +157,19 @@ export default function ProductDetailPage() {
                         {productDetail.quantity === 0 && (
                             <Typography variant="h1" color="white" fontSize="1rem" fontWeight="500">Trạng thái: Tạm thời hết hàng</Typography>
                         )}
-                        <Box display="flex" gap="6px" >
-                            <Button variant="contained" size="large"
-                                startIcon={<AddShoppingCart />}
-                                onClick={() => {
-                                    dispatch(addProductToCart(productDetail));
-                                }}
-                            >
-                                Thêm vào giỏ hàng
-                            </Button>
+                        {productDetail.quantity > 0 && (
+                            <Box display="flex" gap="6px" >
+                                <Button variant="contained" size="large"
+                                    startIcon={<AddShoppingCart />}
+                                    onClick={() => {
+                                        dispatch(addProductToCart(productDetail));
+                                    }}
+                                >
+                                    Thêm vào giỏ hàng
+                                </Button>
 
-                        </Box>
+                            </Box>
+                        )}
                     </Box>
                 </Stack >
                 <Stack direction="column" spacing={1} alignItems="center" sx={{ backgroundColor: "white", borderRadius: "8px", padding: "16px", marginTop: "32px" }} >

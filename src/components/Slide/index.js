@@ -19,7 +19,7 @@ export default function Slide() {
         >
             {banners.map((banner, index) => (
                 <SwiperSlide key={index}>
-                    <img src={banner} alt="ảnh" className='w-full cursor-pointer' />
+                    <img src={banner} alt="ảnh" className='animate__animated animate__fadeIn w-full cursor-pointer' />
                 </SwiperSlide>
             ))}
         </Swiper>

@@ -23,6 +23,7 @@ export default function HomePage() {
         <Box
             backgroundColor="#3E3E3F"
             minHeight="100vh"
+            paddingBottom="18px"
         >
             <Slide />
             <CategoryBox categories={categories} />

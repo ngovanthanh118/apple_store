@@ -13,7 +13,7 @@ const signIn = createAsyncThunk(
         const res = await customerService.signIn(payload);
         setCookie('token', res.token, 9999);
         dispatch(saveProfileCustomer(res.data));
-        return true;
+        return res;
     }
 )
 const siginUp = createAsyncThunk(
@@ -30,8 +30,12 @@ const updateProfile = createAsyncThunk(
     async (payload, { dispatch }) => {
         const { id, ...rest } = payload;
         const res = await customerService.updateProfile(id, rest);
-        dispatch(saveProfileCustomer(res.data));
-        return res;
+        if (res.admin) {
+            return res;
+        } else {
+            await dispatch(saveProfileCustomer(res.data));
+            return res;
+        }
     }
 )
 const logout = createAsyncThunk(

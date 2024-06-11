@@ -127,9 +127,12 @@ export default function OrderDetailPage() {
                         />
                         <CardContent>
                             {orderDetail.products?.length > 0 && orderDetail.products.map((product) =>
-                                <Stack key={product._id} direction="row" spacing={2} justifyContent="space-between" alignItems="center" sx={{ paddingY: "12px" }}>
-                                    <img src={`${process.env.REACT_APP_API_URL}/images/${product.image}`} alt="Ảnh" className="w-10 h-10" />
-                                    <Typography fontSize="1rem" fontWeight="400" sx={{ flex: "1" }}>{product.name} {product.capacity} x {product.quantity}</Typography>
+                                <Stack key={product._id} direction="row" spacing={2} justifyContent="space-between" alignItems="end" sx={{ paddingY: "12px" }}>
+                                    <img src={`${process.env.REACT_APP_API_URL}/images/${product.image}`} alt="Ảnh" className="w-12 h-12" />
+                                    <Box flex={1}>
+                                        <Typography fontSize="1rem" fontWeight="400">{product.name} {product.capacity} x {product.quantity}</Typography>
+                                        <Typography fontSize="1rem" fontWeight="400">{product.color}</Typography>
+                                    </Box>
                                     <Typography fontSize="0.9rem" fontWeight="400">{formatNumberWithDot(product.price * product.quantity)}đ</Typography>
                                 </Stack>
                             )}

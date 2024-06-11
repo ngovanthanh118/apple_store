@@ -10,6 +10,7 @@ export const cartSlice = createSlice({
     reducers: {
         addProductToCart: (state, action) => {
             const index = state.value.findIndex(proc => proc._id === action.payload._id);
+            if (state.value[index]?.quantity_order && state.value[index]?.quantity_order >= state.value[index].quantity) return;
             if (index > -1) {
                 state.value[index] = { ...state.value[index], quantity_order: state.value[index].quantity_order + 1 };
                 return;

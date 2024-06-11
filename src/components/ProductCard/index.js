@@ -15,6 +15,7 @@ export default function ProductCard({ product }) {
                 overflow: "hidden",
                 paddingBottom: "4rem",
                 cursor: "pointer",
+                padding: "18px"
             }}
             className="animate__animated animate__fadeInDown"
             onClick={() => navigate(`/product/${product._id}`)}
@@ -73,14 +74,14 @@ export default function ProductCard({ product }) {
                                 component="h1"
                                 color="white"
                                 fontWeight="500"
-                                fontSize="1.25rem"
+                                fontSize="1rem"
                             >
                                 {formatNumberWithDot(product.discount)}đ
                             </Typography>
                             <Typography
                                 color="white"
                                 fontWeight="500"
-                                fontSize="1rem"
+                                fontSize="0.9rem"
                                 sx={{
                                     textDecorationLine: "line-through"
                                 }}
@@ -91,7 +92,7 @@ export default function ProductCard({ product }) {
                                 component="span"
                                 color="white"
                                 fontWeight="400"
-                                fontSize="1rem"
+                                fontSize="0.9rem"
                             >
                                 -{100 - Math.round(product.discount / product.price * 100)}%
                             </Typography>
@@ -100,7 +101,7 @@ export default function ProductCard({ product }) {
                             component="h1"
                             color="white"
                             fontWeight="500"
-                            fontSize="1.25rem"
+                            fontSize="1rem"
                         >
                             {formatNumberWithDot(product.price)}đ
                         </Typography>
